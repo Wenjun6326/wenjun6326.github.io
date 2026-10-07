@@ -1,27 +1,42 @@
-# 欧阳文钧 · 个人主页
+# 欧阳文钧 · 个人站点
 
-一个参考 [apple.com](https://www.apple.com/) 视觉语言制作的单文件个人主页。
+一个参考 [apple.com](https://www.apple.com/) 视觉语言制作的多级页面个人站点。
 
-## 在线预览
+## 在线访问
 
 👉 **https://wenjun6326.github.io/**
 
-## 特点
+## 页面结构
 
-- **单文件**：只有一个 `index.html`，零依赖、无需构建、可离线打开
-- **Apple 风格排版**：吸顶磨砂导航、巨字标题、超大留白、黑白灰交替区块、卡片式配置对比表
-- **滚动进场**：IntersectionObserver 淡入上浮，逐级延迟
-- **文字磁吸交互**：鼠标靠近标题时，每个字会各自被推开，阻尼弹簧回弹；静止时严格对齐
-- **累计数字动效**：从 380,000,000 滚动到 400,000,000，随后 `+` 着重放大，背后浮现蓝色渐变光晕
-- **Token 控制中心**：点击按钮余额上涨、进度条伸长、终端日志追加，并与数据区累计值联动
+```
+index.html              一级页面 —— “Token 就是这么简单”
+projects/index.html     二级页面 —— 三个项目详情（含插画与下载按钮）
+profile/index.html      个人主页 —— 原来的自我介绍页
+styles.css              共享样式
+app.js                  共享脚本（交互、动效、下载、页面过渡）
+```
+
+## 三个项目
+
+| 项目 | 内容 | 下载 |
+|---|---|---|
+| [WiFiSniffer-BLE-Advertiser-ESP32](https://github.com/Wenjun6326/WiFiSniffer-BLE-Advertiser-ESP32) | ESP32-S3 独立无线测试平台：自带热点的 WiFi 监听 + 设备端协议解码 + BLE 近场配对广播器 | 源码 zip |
+| [BarbequesDelight](https://github.com/Wenjun6326/BarbequesDelight) | Barbeque's Delight 从 MC 1.20.1 到 26.1 的 Fabric 移植（非官方） | jar 152 KB |
+| [Cultural-Delights-1.21](https://github.com/Wenjun6326/Cultural-Delights-1.21) | Cultural Delights 的 1.21.1 NeoForge 适配 + 26.1 Fabric 分支 | jar 302 KB |
+
+> 两个模组均为**移植 / 适配**，原模组的设计与美术版权属于原作者，页面上都做了明确标注。
+
+## 技术特点
+
+- **零依赖**：纯 HTML / CSS / 原生 JS，无需构建，可离线打开
+- **丝滑跳转**：跨文档 View Transitions API（`@view-transition`），导航栏与主标题做形变过渡；不支持时降级为淡出遮罩
+- **文字磁吸**：鼠标靠近标题时每个字被推开，阻尼弹簧回弹；静止时严格对齐（无初始偏移）
+- **累计数字动效**：从 380,000,000 滚到 400,000,000，随后 `+` 放大到 1.78 倍并浮现蓝色渐变光晕
+- **手绘 SVG 插画**：三幅原创插画，带 WiFi 波纹、炉火跳动、蒸汽上升等循环动画
+- **按下即下载**：`Content-Disposition: attachment` 直链 + 真实 `<a download>` 点击，并有导航兜底，页面不跳转
+- **几何图案**：漂移的网格渐变、浮动几何体视差、无缝跑马灯
 - **响应式**：360px ~ 1440px 全区间无横向溢出
-
-## 内容
-
-- 姓名：欧阳文钧
-- 爱好：白嫖李老师的东西（Token）
-- GitHub：[@Wenjun6326](https://github.com/Wenjun6326)
-- 邮箱：w1330253@gmail.com
+- **无障碍**：`prefers-reduced-motion` 全面降级，插画带 `aria-label`，拆分字符保留 `aria-label`
 
 ## 本地运行
 
@@ -29,13 +44,13 @@
 
 ```bash
 python -m http.server 8000
-# 然后访问 http://localhost:8000
+# 访问 http://localhost:8000
 ```
 
 ## 部署
 
-仓库直接作为 GitHub Pages 源：`main` 分支根目录。推送后线上自动更新。
+仓库即 GitHub Pages 源：`main` 分支根目录，已含 `.nojekyll`。推送到 `main` 后线上自动更新。
 
 ## 声明
 
-纯属个人趣味自我介绍演示，页面内容为玩笑性质，无任何实际资源获取行为。
+纯属个人趣味展示，内容为玩笑性质，无任何实际资源获取行为。项目均由李老师的 Token 额度赞助完成。
