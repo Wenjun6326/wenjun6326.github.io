@@ -23,6 +23,8 @@ html{
   -webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:64px;
   /* 兜底：任何元素溢出都不产生横向滚动条（clip 不会破坏 sticky 与滚动） */
   overflow-x:clip;
+  /* 底色跟着页面，避免加载/跳转瞬间露出白底造成闪白 */
+  background:var(--paper);
 }
 body{
   margin:0;background:var(--paper);color:var(--ink);
@@ -95,6 +97,10 @@ h3.mid{font-size:clamp(22px,3.2vw,32px);line-height:1.15;font-weight:700;letter-
 .btn-lg{padding:16px 34px;font-size:19px;}
 .btn .arr{transition:transform .35s var(--spring);}
 .btn:hover .arr{transform:translateX(4px);}
+/* 深色区块里的青色幽灵按钮（带图标） */
+.btn-ghost.gh-link{border-color:#64d2ff;color:#64d2ff;}
+.btn-ghost.gh-link:hover{background:#64d2ff;color:#001b2b;border-color:#64d2ff;}
+.btn-ghost.gh-link .gh-ico{width:16px;height:16px;fill:currentColor;flex:none;}
 .link-more{display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-size:17px;margin-top:6px;}
 .link-more::after{content:"›";font-size:20px;line-height:1;transition:transform .3s var(--ease);}
 .link-more:hover{text-decoration:underline;}
@@ -608,18 +614,17 @@ footer{background:var(--paper-alt);padding:60px 0 44px;border-top:1px solid var(
   #hero .orb,.landing-stage .mesh,.shapes i,.marquee-track{animation:none !important;}
 }
 
-/* ============ 跨文档视图过渡（丝滑跳转） ============ */
+/* ============ 跨文档视图过渡（丝滑跳转，无闪白） ============ */
 @view-transition{navigation:auto;}
-::view-transition-old(root){animation:vtOut .3s var(--ease) both;}
-::view-transition-new(root){animation:vtIn .5s var(--ease) both;}
-@keyframes vtOut{to{opacity:0;transform:scale(.985);}}
-@keyframes vtIn{from{opacity:0;transform:scale(1.012);}to{opacity:1;transform:none;}}
+/* 背景色跟随页面，避免过渡期间露出白底造成“闪一下” */
+::view-transition{background-color:#fbfbfd;}
+::view-transition-old(root),::view-transition-new(root){mix-blend-mode:normal;}
+::view-transition-old(root){animation:vtOut .24s var(--ease) both;}
+::view-transition-new(root){animation:vtIn .34s var(--ease) both;}
+@keyframes vtOut{to{opacity:0;}}
+@keyframes vtIn{from{opacity:0;}to{opacity:1;}}
 ::view-transition-old(site-nav),::view-transition-new(site-nav){animation:none;}
-::view-transition-old(hero-title){animation:vtTitleOut .32s var(--ease) both;}
-::view-transition-new(hero-title){animation:vtTitleIn .52s var(--ease) both;}
-@keyframes vtTitleOut{to{opacity:0;transform:translateY(-14px) scale(.985);}}
-@keyframes vtTitleIn{from{opacity:0;transform:translateY(18px) scale(.99);}to{opacity:1;transform:none;}}
+/* 主标题不做独立形变，避免与页面淡入叠加产生闪动 */
 @media (prefers-reduced-motion:reduce){
-  ::view-transition-old(root),::view-transition-new(root),
-  ::view-transition-old(hero-title),::view-transition-new(hero-title){animation:none !important;}
+  ::view-transition-old(root),::view-transition-new(root){animation:none !important;}
 }

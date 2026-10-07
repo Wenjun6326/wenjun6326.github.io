@@ -414,7 +414,6 @@
     var noteEl = document.getElementById("tokenNote");
     var logEl = document.getElementById("logLines");
     var btn1 = document.getElementById("getToken");
-    var btn2 = document.getElementById("getToken2");
     if (!valueEl || !meterEl) return;
 
     var statsNumberEl = document.getElementById("statsNumber");
@@ -462,7 +461,6 @@
     }
     render(false); renderLifetime();
     if (btn1) btn1.addEventListener("click", grab);
-    if (btn2) btn2.addEventListener("click", grab);
   })();
 
   /* ---------------------------------------------------------
