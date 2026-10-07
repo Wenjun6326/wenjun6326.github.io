@@ -131,6 +131,29 @@ h3.mid{font-size:clamp(22px,3.2vw,32px);line-height:1.15;font-weight:700;letter-
   width:8px;height:8px;border-radius:50%;background:#30d158;
   box-shadow:0 0 0 4px rgba(48,209,88,.18);
 }
+/* 首屏的 Token 主题句 */
+.hero-badge{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:7px 17px;border-radius:980px;margin-bottom:22px;
+  background:rgba(255,255,255,.72);border:1px solid rgba(0,0,0,.07);
+  box-shadow:0 6px 18px -12px rgba(0,0,0,.4);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  font-size:12.5px;color:var(--ink-soft);
+}
+.hero-badge .dot{
+  width:7px;height:7px;border-radius:50%;background:#30d158;
+  box-shadow:0 0 0 4px rgba(48,209,88,.16);
+}
+.token-line{
+  margin:26px auto 0;max-width:680px;
+  font-size:clamp(17px,2.1vw,22px);line-height:1.4;
+  color:var(--ink-soft);letter-spacing:-.01em;
+}
+.token-line .thanks{
+  font-weight:600;
+  background:linear-gradient(100deg,#0a84ff,#5e5ce6 55%,#0a84ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
 
 /* ============ 卡片 / 窗口 ============ */
 .card{
