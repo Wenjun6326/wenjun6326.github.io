@@ -492,45 +492,46 @@
 </footer>
 
 <style>
-/* 插画动效（只作用于本页 SVG） */
-.wave{transform-origin:40px 320px;animation:wavePulse 3.4s var(--ease) infinite;}
-.w2{animation-delay:.22s;}
-.w3{animation-delay:.44s;}
+/* 插画动效 —— 全部限定在 .art 内，避免与全站通用类名（.wrap/.wave/.bowl…）冲突 */
+.art .wave{transform-origin:40px 320px;animation:wavePulse 3.4s var(--ease) infinite;}
+.art .w2{animation-delay:.22s;}
+.art .w3{animation-delay:.44s;}
 @keyframes wavePulse{0%,100%{opacity:.35;}45%{opacity:1;}}
-.ble circle{transform-origin:470px 118px;animation:blePing 2.8s var(--ease) infinite;}
-.ble circle:nth-child(2){animation-delay:.3s;}
-.ble circle:nth-child(3){animation-delay:.6s;}
+.art .ble circle{transform-origin:470px 118px;animation:blePing 2.8s var(--ease) infinite;}
+.art .ble circle:nth-child(2){animation-delay:.3s;}
+.art .ble circle:nth-child(3){animation-delay:.6s;}
 @keyframes blePing{0%,100%{opacity:.25;transform:scale(.94);}45%{opacity:.9;transform:scale(1.04);}}
-.board{animation:boardFloat 7s var(--ease) infinite alternate;}
+.art .board{animation:boardFloat 7s var(--ease) infinite alternate;}
 @keyframes boardFloat{from{transform:translateY(-4px);}to{transform:translateY(5px);}}
-.pins rect{animation:pinBlink 2.6s steps(1,end) infinite;}
-.pins rect:nth-child(2n){animation-delay:.4s;}
-.pins rect:nth-child(3n){animation-delay:.9s;}
+.art .pins rect{animation:pinBlink 2.6s steps(1,end) infinite;}
+.art .pins rect:nth-child(2n){animation-delay:.4s;}
+.art .pins rect:nth-child(3n){animation-delay:.9s;}
 @keyframes pinBlink{0%,84%{opacity:.9;}85%,100%{opacity:.35;}}
 
-.fire .f1,.fire .f2,.fire .f3{transform-origin:center bottom;animation:flick 1.5s var(--ease) infinite alternate;}
-.f2{animation-delay:-.5s;} .f3{animation-delay:-.9s;}
+.art .fire .f1,.art .fire .f2,.art .fire .f3{transform-origin:center bottom;animation:flick 1.5s var(--ease) infinite alternate;}
+.art .f2{animation-delay:-.5s;} .art .f3{animation-delay:-.9s;}
 @keyframes flick{from{transform:scaleY(.9) scaleX(1);opacity:.75;}to{transform:scaleY(1.1) scaleX(.95);opacity:1;}}
-.smoke path{animation:rise 5s linear infinite;}
-.s2{animation-delay:-1.7s;} .s3{animation-delay:-3.4s;}
+.art .smoke path{animation:rise 5s linear infinite;}
+.art .s2{animation-delay:-1.7s;} .art .s3{animation-delay:-3.4s;}
 @keyframes rise{0%{opacity:0;transform:translateY(14px);}25%{opacity:.5;}100%{opacity:0;transform:translateY(-26px);}}
-.skew{animation:skewIdle 4.4s var(--ease) infinite alternate;}
-.sk2{animation-delay:-1.4s;} .sk3{animation-delay:-2.8s;}
+.art .skew{animation:skewIdle 4.4s var(--ease) infinite alternate;}
+.art .sk2{animation-delay:-1.4s;} .art .sk3{animation-delay:-2.8s;}
 @keyframes skewIdle{from{transform:translateY(-2.5px);}to{transform:translateY(2.5px);}}
 
-.steam path{animation:steamUp 5.4s linear infinite;}
-.st2{animation-delay:-1.8s;} .st3{animation-delay:-3.6s;}
+.art .steam path{animation:steamUp 5.4s linear infinite;}
+.art .st2{animation-delay:-1.8s;} .art .st3{animation-delay:-3.6s;}
 @keyframes steamUp{0%{opacity:0;transform:translateY(16px) scaleY(.9);}30%{opacity:.6;}100%{opacity:0;transform:translateY(-30px) scaleY(1.1);}}
-.bowl{animation:bowlBreath 6s var(--ease) infinite alternate;transform-origin:300px 200px;}
+.art .bowl{animation:bowlBreath 6s var(--ease) infinite alternate;transform-origin:300px 200px;}
 @keyframes bowlBreath{from{transform:translateY(2px) scale(1);}to{transform:translateY(-3px) scale(1.012);}}
-.avo{animation:avoBob 5s var(--ease) infinite alternate;transform-origin:112px 272px;}
+.art .avo{animation:avoBob 5s var(--ease) infinite alternate;transform-origin:112px 272px;}
 @keyframes avoBob{from{transform:translateY(-3px) rotate(-2deg);}to{transform:translateY(3px) rotate(2deg);}}
-.corn{animation:cornBob 5.6s var(--ease) infinite alternate;transform-origin:486px 276px;}
+.art .corn{animation:cornBob 5.6s var(--ease) infinite alternate;transform-origin:486px 276px;}
 @keyframes cornBob{from{transform:translateY(3px) rotate(1.5deg);}to{transform:translateY(-3px) rotate(-1.5deg);}}
-.wrap{animation:wrapBob 5.2s var(--ease) infinite alternate;transform-origin:452px 122px;}
+.art .wrap{animation:wrapBob 5.2s var(--ease) infinite alternate;transform-origin:452px 122px;}
 @keyframes wrapBob{from{transform:translateY(-3px) rotate(1deg);}to{transform:translateY(3px) rotate(-1deg);}}
 @media (prefers-reduced-motion:reduce){
-  .wave,.ble circle,.board,.pins rect,.fire path,.smoke path,.skew,.steam path,.bowl,.avo,.corn,.wrap{animation:none !important;}
+  .art .wave,.art .ble circle,.art .board,.art .pins rect,.art .fire path,.art .smoke path,
+  .art .skew,.art .steam path,.art .bowl,.art .avo,.art .corn,.art .wrap{animation:none !important;}
 }
 </style>
 
