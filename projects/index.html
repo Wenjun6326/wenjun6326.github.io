@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f5f5f7">
 <meta name="description" content="用李老师的 Token 额度做的三个项目：ESP32-S3 WiFi/BLE 无线测试平台、Barbeque's Delight 与 Cultural Delights 的 Minecraft 移植。">
 <title>项目 — 用李老师的额度做的 · 欧阳文钧</title>
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles.css?v=20261007b">
 </head>
 <body>
 
@@ -74,7 +74,7 @@
 
             <!-- 背景几何 -->
             <circle cx="150" cy="118" r="64" fill="#0a84ff" opacity=".07"/>
-            <rect x="418" y="222" width="112" height="112" rx="20" fill="#5b8cff" opacity=".08" transform="rotate(16 474 278)"/>
+            <rect x="418" y="222" width="112" height="112" rx="26" fill="#5b8cff" opacity=".08"/>
             <rect x="60" y="28" width="12" height="12" rx="3" fill="none" stroke="#0a84ff" stroke-width="1.4" opacity=".35"/>
             <rect x="536" y="52" width="12" height="12" rx="3" fill="none" stroke="#0a84ff" stroke-width="1.4" opacity=".35"/>
 
@@ -199,7 +199,7 @@
 
             <!-- 背景几何 -->
             <circle cx="470" cy="112" r="72" fill="#ff9f0a" opacity=".1"/>
-            <rect x="52" y="230" width="104" height="104" rx="18" fill="#ff9f0a" opacity=".09" transform="rotate(-12 104 282)"/>
+            <rect x="52" y="230" width="104" height="104" rx="26" fill="#ff9f0a" opacity=".09"/>
             <path d="M520 40l16 27h-32z" fill="#ff9f0a" opacity=".16"/>
             <rect x="60" y="48" width="11" height="11" rx="3" fill="none" stroke="#d97a06" stroke-width="1.4" opacity=".4"/>
 
@@ -323,7 +323,7 @@
 
             <!-- 背景几何 -->
             <circle cx="146" cy="112" r="70" fill="#30d158" opacity=".1"/>
-            <rect x="424" y="60" width="104" height="104" rx="22" fill="#30d158" opacity=".08" transform="rotate(14 476 112)"/>
+            <rect x="424" y="60" width="104" height="104" rx="26" fill="#30d158" opacity=".08"/>
             <path d="M64 300l22-38 22 38z" fill="#30d158" opacity=".13"/>
             <circle cx="534" cy="286" r="26" fill="none" stroke="#1f9e52" stroke-width="1.5" opacity=".3"/>
             <rect x="40" y="180" width="11" height="11" rx="3" fill="none" stroke="#1f9e52" stroke-width="1.4" opacity=".35"/>
@@ -524,17 +524,17 @@
 .art .bowl{animation:bowlBreath 6s var(--ease) infinite alternate;transform-origin:300px 200px;}
 @keyframes bowlBreath{from{transform:translateY(2px) scale(1);}to{transform:translateY(-3px) scale(1.012);}}
 .art .avo{animation:avoBob 5s var(--ease) infinite alternate;transform-origin:112px 272px;}
-@keyframes avoBob{from{transform:translateY(-3px) rotate(-2deg);}to{transform:translateY(3px) rotate(2deg);}}
+@keyframes avoBob{from{transform:translateY(-3px) scale(1);}to{transform:translateY(3px) scale(1.02);}}
 .art .corn{animation:cornBob 5.6s var(--ease) infinite alternate;transform-origin:486px 276px;}
-@keyframes cornBob{from{transform:translateY(3px) rotate(1.5deg);}to{transform:translateY(-3px) rotate(-1.5deg);}}
+@keyframes cornBob{from{transform:translateY(3px) scale(1.015);}to{transform:translateY(-3px) scale(0.99);}}
 .art .wrap{animation:wrapBob 5.2s var(--ease) infinite alternate;transform-origin:452px 122px;}
-@keyframes wrapBob{from{transform:translateY(-3px) rotate(1deg);}to{transform:translateY(3px) rotate(-1deg);}}
+@keyframes wrapBob{from{transform:translateY(-3px) scale(0.995);}to{transform:translateY(3px) scale(1.015);}}
 @media (prefers-reduced-motion:reduce){
   .art .wave,.art .ble circle,.art .board,.art .pins rect,.art .fire path,.art .smoke path,
   .art .skew,.art .steam path,.art .bowl,.art .avo,.art .corn,.art .wrap{animation:none !important;}
 }
 </style>
 
-<script src="../app.js"></script>
+<script src="../app.js?v=20261007b"></script>
 </body>
 </html>
