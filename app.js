@@ -185,14 +185,25 @@
       root.textContent = "";
       root.setAttribute("aria-label", text);
 
-      var items = chars.map(function (c) {
+      /* 按「词」分组：词内用 nowrap 容器包住，词间放真实空格，
+         这样换行只发生在词与词之间，不会把英文单词从中间断开 */
+      var items = [];
+      var word = null;
+      function flush() { if (word && word.childNodes.length) { root.appendChild(word); word = null; } }
+      chars.forEach(function (c) {
+        if (c === " " || c === "\u00a0") {
+          flush();
+          root.appendChild(document.createTextNode(" "));
+          return;
+        }
+        if (!word) { word = document.createElement("span"); word.className = "magnet-word"; }
         var ch = document.createElement("span");
         ch.className = "magnet ch";
         ch.textContent = c;
-        if (c === " ") { ch.style.width = ".28em"; ch.style.display = "inline-block"; }
-        root.appendChild(ch);
-        return { el: ch, x: 0, y: 0, vx: 0, vy: 0 };
+        word.appendChild(ch);
+        items.push({ el: ch, x: 0, y: 0, vx: 0, vy: 0 });
       });
+      flush();
 
       var bounds = [], mx = 0, my = 0, active = false, raf = 0;
 
