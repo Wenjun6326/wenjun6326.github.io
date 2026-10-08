@@ -1,12 +1,30 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<html><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f5f5f7">
+<script>
+/* 尽早决定主题与语言，避免首屏闪烁 */
+(function(){
+  try{
+    var d=document.documentElement, p=localStorage.getItem("wenjun.theme")||"auto";
+    var dark = p==="dark" || (p==="auto" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
+    d.setAttribute("data-theme", dark?"dark":"light");
+    if(dark){var m=document.querySelector('meta[name="theme-color"]'); if(m) m.setAttribute("content","#000000");}
+    var l=localStorage.getItem("wenjun.lang");
+    if(!l) l=(navigator.language||"zh").toLowerCase().indexOf("zh")===0?"zh":"en";
+    d.setAttribute("lang", l==="en"?"en":"zh-CN");
+  }catch(e){}
+})();
+</script>
 <meta name="description" content="用李老师的 Token 额度做的三个项目：ESP32-S3 WiFi/BLE 无线测试平台、Barbeque's Delight 与 Cultural Delights 的 Minecraft 移植。">
 <title>项目 — 用李老师的额度做的 · 欧阳文钧</title>
-<link rel="stylesheet" href="../styles.css?v=20261007b">
+<!-- i18n -->
+<meta name="i18n-title" data-zh="项目 — 用李老师的额度做的 · 欧阳文钧" data-en="Projects — built with Mr. Li's quota · Ouyang Wenjun">
+<meta name="description" content="用李老师的 Token 额度做的三个项目：ESP32-S3 WiFi/BLE 无线测试平台、Barbeque's Delight 与 Cultural Delights 的 Minecraft 移植。" data-en="Three projects built with Mr. Li's token quota: an ESP32-S3 WiFi/BLE wireless testbed, plus Minecraft ports of Barbeque's Delight and Cultural Delights.">
+<link rel="stylesheet" href="../styles.css?v=20261007c">
+<script src="../assets/i18n-dict.js?v=20261007c"></script>
+<script src="../assets/i18n-theme.js?v=20261007c"></script>
 </head>
 <body>
 
@@ -14,10 +32,20 @@
   <div class="inner">
     <a class="brand" href="../index.html">欧阳文钧</a>
     <div class="links">
-      <a href="../index.html">首页 · 个人主页</a>
-      <a href="index.html" class="on">项目</a>
-      <a href="../index.html#tokens">Token</a>
+      <a href="../index.html" data-i18n-key="nav.homeFull">首页 · 个人主页</a>
+      <a href="index.html" class="on" data-i18n-key="nav.projects">项目</a>
+      <a href="../index.html#tokens" data-i18n-key="nav.tokens">Token</a>
       <a href="https://github.com/Wenjun6326" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <div class="nav-tools">
+      <button class="tool-btn lang-toggle" id="langToggle" type="button" aria-label="Switch to English">
+        <span class="lg lg-zh">中文</span><span class="lg lg-en">EN</span>
+      </button>
+      <button class="tool-btn theme-toggle" id="themeToggle" type="button" aria-label="切换到深色模式">
+        <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2.6v2.2M12 19.2v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.6 12h2.2M19.2 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"></path></svg>
+        <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.4A8.4 8.4 0 0 1 9.6 4a8.4 8.4 0 1 0 10.4 10.4Z"></path></svg>
+      </button>
+    </div>
+
     </div>
   </div>
 </nav>
@@ -27,17 +55,17 @@
   <!-- ================= 页头 ================= -->
   <section id="projects-hero">
     <div class="wrap center">
-      <a class="back-link" href="../index.html">返回首页</a>
-      <p class="eyebrow reveal">项目</p>
-      <h1 class="big reveal d1" style="font-size:clamp(34px,6.4vw,64px)">用额度换来的三个东西</h1>
-      <p class="lead reveal d2">
+      <a class="back-link" href="../index.html" data-i18n-key="proj.back">返回首页</a>
+      <p class="eyebrow reveal" data-i18n-key="proj.eyebrow">项目</p>
+      <h1 class="big reveal d1" style="font-size:clamp(34px,6.4vw,64px)" data-i18n-key="proj.title">用额度换来的三个东西</h1>
+      <p class="lead reveal d2" data-i18n-html-key="proj.lead">
         一个跑在硬件上的无线测试平台，两个 Minecraft 模组移植。<br>
         全部由李老师的 Token 额度赞助 —— <b style="color:var(--ink)">自费 0 元</b>。
       </p>
       <div class="btns reveal d3">
-        <a class="btn btn-solid" href="#esp32">ESP32 平台</a>
-        <a class="btn btn-ghost" href="#bbq">烤肉模组</a>
-        <a class="btn btn-ghost" href="#cultural">文化美食模组</a>
+        <a class="btn btn-solid" href="#esp32" data-i18n-key="proj.jump1">ESP32 平台</a>
+        <a class="btn btn-ghost" href="#bbq" data-i18n-key="proj.jump2">烤肉模组</a>
+        <a class="btn btn-ghost" href="#cultural" data-i18n-key="proj.jump3">文化美食模组</a>
       </div>
     </div>
   </section>
@@ -62,67 +90,67 @@
           <svg viewBox="0 0 600 380" role="img" aria-label="ESP32-S3 开发板示意图：天线、芯片、引脚，向外发出 WiFi 与 BLE 信号">
             <defs>
               <linearGradient id="gBoard" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#123a72"/><stop offset="1" stop-color="#0a2143"/>
+                <stop offset="0" stop-color="#123a72"></stop><stop offset="1" stop-color="#0a2143"></stop>
               </linearGradient>
               <linearGradient id="gChip" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#9fb6cf"/><stop offset="1" stop-color="#6d859e"/>
+                <stop offset="0" stop-color="#9fb6cf"></stop><stop offset="1" stop-color="#6d859e"></stop>
               </linearGradient>
               <linearGradient id="gWave" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#0a84ff"/><stop offset="1" stop-color="#64d2ff"/>
+                <stop offset="0" stop-color="#0a84ff"></stop><stop offset="1" stop-color="#64d2ff"></stop>
               </linearGradient>
             </defs>
 
             <!-- 背景几何 -->
-            <circle cx="150" cy="118" r="64" fill="#0a84ff" opacity=".07"/>
-            <rect x="418" y="222" width="112" height="112" rx="26" fill="#5b8cff" opacity=".08"/>
-            <rect x="60" y="28" width="12" height="12" rx="3" fill="none" stroke="#0a84ff" stroke-width="1.4" opacity=".35"/>
-            <rect x="536" y="52" width="12" height="12" rx="3" fill="none" stroke="#0a84ff" stroke-width="1.4" opacity=".35"/>
+            <circle cx="150" cy="118" r="64" fill="#0a84ff" opacity=".07"></circle>
+            <rect x="418" y="222" width="112" height="112" rx="26" fill="#5b8cff" opacity=".08"></rect>
+            <rect x="60" y="28" width="12" height="12" rx="3" fill="none" stroke="#0a84ff" stroke-width="1.4" opacity=".35"></rect>
+            <rect x="536" y="52" width="12" height="12" rx="3" fill="none" stroke="#0a84ff" stroke-width="1.4" opacity=".35"></rect>
 
             <!-- WiFi 同心弧 -->
             <g class="wifi">
-              <path d="M40 320a216 216 0 0 1 152-63" fill="none" stroke="url(#gWave)" stroke-width="3.4" stroke-linecap="round" class="wave w1"/>
-              <path d="M40 320a156 156 0 0 1 110-46" fill="none" stroke="url(#gWave)" stroke-width="3.4" stroke-linecap="round" class="wave w2"/>
-              <path d="M40 320a98 98 0 0 1 69-29" fill="none" stroke="url(#gWave)" stroke-width="3.4" stroke-linecap="round" class="wave w3"/>
-              <circle cx="40" cy="320" r="6.5" fill="#0a84ff"/>
+              <path d="M40 320a216 216 0 0 1 152-63" fill="none" stroke="url(#gWave)" stroke-width="3.4" stroke-linecap="round" class="wave w1"></path>
+              <path d="M40 320a156 156 0 0 1 110-46" fill="none" stroke="url(#gWave)" stroke-width="3.4" stroke-linecap="round" class="wave w2"></path>
+              <path d="M40 320a98 98 0 0 1 69-29" fill="none" stroke="url(#gWave)" stroke-width="3.4" stroke-linecap="round" class="wave w3"></path>
+              <circle cx="40" cy="320" r="6.5" fill="#0a84ff"></circle>
             </g>
             <text x="48" y="352" fill="#5b7fa6" font-size="13" font-family="ui-monospace,Menlo,Consolas,monospace">TEST_1101</text>
 
             <!-- 开发板 -->
             <g class="board">
-              <rect x="214" y="104" width="212" height="182" rx="16" fill="url(#gBoard)"/>
-              <rect x="214" y="104" width="212" height="182" rx="16" fill="none" stroke="#4a86c8" stroke-width="1.2" opacity=".5"/>
+              <rect x="214" y="104" width="212" height="182" rx="16" fill="url(#gBoard)"></rect>
+              <rect x="214" y="104" width="212" height="182" rx="16" fill="none" stroke="#4a86c8" stroke-width="1.2" opacity=".5"></rect>
               <!-- 天线 -->
-              <rect x="236" y="124" width="78" height="17" rx="4" fill="none" stroke="#64d2ff" stroke-width="1.5" opacity=".85"/>
-              <path d="M240 140v-6h8v6h8v-6h8v6h8v-6h8v6h8v-6h8v6h8" fill="none" stroke="#64d2ff" stroke-width="1.2" opacity=".6"/>
+              <rect x="236" y="124" width="78" height="17" rx="4" fill="none" stroke="#64d2ff" stroke-width="1.5" opacity=".85"></rect>
+              <path d="M240 140v-6h8v6h8v-6h8v6h8v-6h8v6h8v-6h8v6h8" fill="none" stroke="#64d2ff" stroke-width="1.2" opacity=".6"></path>
               <!-- 主芯片 -->
-              <rect x="232" y="176" width="88" height="72" rx="8" fill="url(#gChip)"/>
-              <rect x="244" y="192" width="64" height="40" rx="5" fill="#2b3d52" opacity=".65"/>
+              <rect x="232" y="176" width="88" height="72" rx="8" fill="url(#gChip)"></rect>
+              <rect x="244" y="192" width="64" height="40" rx="5" fill="#2b3d52" opacity=".65"></rect>
               <text x="248" y="216" fill="#9fe3ff" font-size="11" font-family="ui-monospace,Menlo,Consolas,monospace">ESP32-S3</text>
               <!-- 元件 -->
-              <rect x="340" y="130" width="30" height="22" rx="4" fill="#1b3a63"/>
-              <rect x="382" y="130" width="20" height="22" rx="4" fill="#1b3a63"/>
-              <circle cx="350" cy="188" r="10" fill="#1b3a63" stroke="#4a86c8" stroke-width="1" opacity=".8"/>
-              <rect x="340" y="212" width="66" height="26" rx="5" fill="#1b3a63"/>
-              <circle cx="402" cy="262" r="9" fill="#ff453a" opacity=".85"/>
+              <rect x="340" y="130" width="30" height="22" rx="4" fill="#1b3a63"></rect>
+              <rect x="382" y="130" width="20" height="22" rx="4" fill="#1b3a63"></rect>
+              <circle cx="350" cy="188" r="10" fill="#1b3a63" stroke="#4a86c8" stroke-width="1" opacity=".8"></circle>
+              <rect x="340" y="212" width="66" height="26" rx="5" fill="#1b3a63"></rect>
+              <circle cx="402" cy="262" r="9" fill="#ff453a" opacity=".85"></circle>
               <text x="392" y="278" fill="#ff8a80" font-size="9">3V3</text>
               <!-- 引脚 -->
               <g class="pins" fill="#7fb4e6" opacity=".9">
-                <rect x="222" y="140" width="16" height="6" rx="2"/><rect x="222" y="158" width="16" height="6" rx="2"/>
-                <rect x="222" y="176" width="16" height="6" rx="2"/><rect x="222" y="194" width="16" height="6" rx="2"/>
-                <rect x="222" y="212" width="16" height="6" rx="2"/><rect x="222" y="230" width="16" height="6" rx="2"/>
-                <rect x="222" y="248" width="16" height="6" rx="2"/>
-                <rect x="402" y="230" width="16" height="6" rx="2"/><rect x="402" y="248" width="16" height="6" rx="2"/>
+                <rect x="222" y="140" width="16" height="6" rx="2"></rect><rect x="222" y="158" width="16" height="6" rx="2"></rect>
+                <rect x="222" y="176" width="16" height="6" rx="2"></rect><rect x="222" y="194" width="16" height="6" rx="2"></rect>
+                <rect x="222" y="212" width="16" height="6" rx="2"></rect><rect x="222" y="230" width="16" height="6" rx="2"></rect>
+                <rect x="222" y="248" width="16" height="6" rx="2"></rect>
+                <rect x="402" y="230" width="16" height="6" rx="2"></rect><rect x="402" y="248" width="16" height="6" rx="2"></rect>
               </g>
               <!-- OLED 小板 -->
-              <rect x="356" y="252" width="62" height="24" rx="4" fill="#05070d" stroke="#4a86c8" stroke-width="1"/>
+              <rect x="356" y="252" width="62" height="24" rx="4" fill="#05070d" stroke="#4a86c8" stroke-width="1"></rect>
               <text x="362" y="269" fill="#64d2ff" font-size="9" font-family="ui-monospace,Menlo,Consolas,monospace">128×64</text>
             </g>
 
             <!-- BLE 广播 -->
             <g class="ble">
-              <circle cx="470" cy="118" r="9" fill="none" stroke="#5b8cff" stroke-width="3.2"/>
-              <circle cx="470" cy="118" r="22" fill="none" stroke="#5b8cff" stroke-width="2.4" opacity=".6"/>
-              <circle cx="470" cy="118" r="38" fill="none" stroke="#5b8cff" stroke-width="1.8" opacity=".32"/>
+              <circle cx="470" cy="118" r="9" fill="none" stroke="#5b8cff" stroke-width="3.2"></circle>
+              <circle cx="470" cy="118" r="22" fill="none" stroke="#5b8cff" stroke-width="2.4" opacity=".6"></circle>
+              <circle cx="470" cy="118" r="38" fill="none" stroke="#5b8cff" stroke-width="1.8" opacity=".32"></circle>
               <text x="500" y="102" fill="#7f9ecf" font-size="11" font-family="ui-monospace,Menlo,Consolas,monospace">BLE 3dBm</text>
             </g>
           </svg>
@@ -136,44 +164,43 @@
             <span class="tag mono">core 3.3.12</span>
             <span class="tag">硬件</span>
           </div>
-          <h2 class="p-title">ESP32-S3 无线测试平台</h2>
-          <p class="p-sum">
+          <h2 class="p-title" data-i18n-key="p1.title">ESP32-S3 无线测试平台</h2>
+          <p class="p-sum" data-i18n-key="p1.sum">
             一个跑在单块 ESP32-S3 上的独立测试平台，一半做 WiFi 监听，一半做 BLE 广播。
             不接电脑也能用 —— 插上任意 USB 充电器，连它的热点就能打开网页界面。
           </p>
           <ul class="highlights">
-            <li><b>自带热点的 WiFi 监听</b>：起一个开放式 AP，跑真实的 DHCP 与 DNS 劫持，被动抓取接入设备的 802.11 帧</li>
-            <li><b>解码全在设备端完成</b>：DNS 查询、HTTP Host、<code>TLS SNI</code>、DHCP 租约、ARP、ICMP、关联过程，不需要上位机</li>
-            <li><b>BLE 近场配对广播器</b>：按 300ms 一发轮流播 Apple Continuity 广播模板，带管理员开关和硬性 60 秒自动关闭</li>
-            <li><b>发射功率可调</b>：3 / 0 / 6 / 9 / −3 / −9 dBm 实时切换，默认 3 dBm；串口还能开 verbose 打印每一个发出的包</li>
-            <li><b>双语管理面板</b>：首次访问跟随浏览器语言，<code>EN / 中文</code> 可切换并记忆；另有 JSON 接口与可下载的日志</li>
-            <li><b>整条工具链自带</b>：仓库内置 <code>arduino-cli</code>、编译上传脚本、PC 端监听工具和一整套测试脚本</li>
+            <li data-i18n-html-key="p1.h1"><b>自带热点的 WiFi 监听</b>：起一个开放式 AP，跑真实的 DHCP 与 DNS 劫持，被动抓取接入设备的 802.11 帧</li>
+            <li data-i18n-html-key="p1.h2"><b>解码全在设备端完成</b>：DNS 查询、HTTP Host、<code>TLS SNI</code>、DHCP 租约、ARP、ICMP、关联过程，不需要上位机</li>
+            <li data-i18n-html-key="p1.h3"><b>BLE 近场配对广播器</b>：按 300ms 一发轮流播 Apple Continuity 广播模板，带管理员开关和硬性 60 秒自动关闭</li>
+            <li data-i18n-html-key="p1.h4"><b>发射功率可调</b>：3 / 0 / 6 / 9 / −3 / −9 dBm 实时切换，默认 3 dBm；串口还能开 verbose 打印每一个发出的包</li>
+            <li data-i18n-html-key="p1.h5"><b>双语管理面板</b>：首次访问跟随浏览器语言，<code>EN / 中文</code> 可切换并记忆；另有 JSON 接口与可下载的日志</li>
+            <li data-i18n-html-key="p1.h6"><b>整条工具链自带</b>：仓库内置 <code>arduino-cli</code>、编译上传脚本、PC 端监听工具和一整套测试脚本</li>
           </ul>
 
           <div class="facts">
-            <div class="fact"><div class="fk">硬件</div><div class="fv">ESP32-S3 DevKitC-1<small>16MB Flash · chip rev 2 · CH343</small></div></div>
-            <div class="fact"><div class="fk">屏幕（可选）</div><div class="fv">SH1106 / SSD1306<small>128×64 I²C · SDA 4 / SCL 5</small></div></div>
-            <div class="fact"><div class="fk">构建</div><div class="fv">需要 huge_app 分区<small>固件约 1.24MB，标准槽 1.25MB</small></div></div>
+            <div class="fact"><div class="fk" data-i18n-key="p1.f1k">硬件</div><div class="fv" data-i18n-key="p1.f1v">ESP32-S3 DevKitC-1<small>16MB Flash · chip rev 2 · CH343</small></div></div>
+            <div class="fact"><div class="fk" data-i18n-key="p1.f2k">屏幕（可选）</div><div class="fv" data-i18n-key="p1.f2v">SH1106 / SSD1306<small>128×64 I²C · SDA 4 / SCL 5</small></div></div>
+            <div class="fact"><div class="fk" data-i18n-key="p1.f3k">构建</div><div class="fv" data-i18n-key="p1.f3v">需要 huge_app 分区<small>固件约 1.24MB，标准槽 1.25MB</small></div></div>
           </div>
 
-          <p class="note-line warn">
+          <p class="note-line warn" data-i18n-html-key="p1.note1">
             <b>关于 iOS 26.5+</b>：BLE 广播器在新版 iOS 上不再弹出配对卡片。这不是固件 bug，
             也无法在固件层修复 —— README 里用一整节解释了原因。它依然在发射，依然是一个好用的 BLE / 射频测试台。
           </p>
-          <p class="note-line">
+          <p class="note-line" data-i18n-html-key="p1.note2">
             <b>使用边界</b>：该项目按「工作台 + 自己的设备」设计，README 有专门的合规章节。
             另外管理面板的默认口令是公开的，真拿去用请务必先改掉。
           </p>
 
           <div class="dl-row">
-            <a class="btn-download" data-download="https://github.com/Wenjun6326/WiFiSniffer-BLE-Advertiser-ESP32/archive/refs/tags/v1.0.0.zip"
-               download="WiFiSniffer-BLE-Advertiser-ESP32-v1.0.0.zip" href="#">
+            <a class="btn-download" data-download="https://github.com/Wenjun6326/WiFiSniffer-BLE-Advertiser-ESP32/archive/refs/tags/v1.0.0.zip" download="WiFiSniffer-BLE-Advertiser-ESP32-v1.0.0.zip" data-dl-key="p1.dlName" href="#" data-i18n-key="p1.dl">
               <span class="spin"></span>
-              <svg class="dl-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0 4.5-4.5M12 15l-4.5-4.5M5 19h14"/></svg>
+              <svg class="dl-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0 4.5-4.5M12 15l-4.5-4.5M5 19h14"></path></svg>
               下载源码（zip · 约 17 MB）
             </a>
-            <a class="repo-link" href="https://github.com/Wenjun6326/WiFiSniffer-BLE-Advertiser-ESP32" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+            <a class="repo-link" href="https://github.com/Wenjun6326/WiFiSniffer-BLE-Advertiser-ESP32" target="_blank" rel="noopener noreferrer" data-i18n-key="p1.repo">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path></svg>
               查看仓库
             </a>
           <p class="dl-hint"></p></div>
@@ -190,62 +217,62 @@
           <svg viewBox="0 0 600 380" role="img" aria-label="烧烤架示意图：三串肉串、加热的炉火与升起的烟">
             <defs>
               <linearGradient id="gGrill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#4a4a4d"/><stop offset="1" stop-color="#232326"/>
+                <stop offset="0" stop-color="#4a4a4d"></stop><stop offset="1" stop-color="#232326"></stop>
               </linearGradient>
               <linearGradient id="gFire" x1="0" y1="1" x2="0" y2="0">
-                <stop offset="0" stop-color="#ff9f0a"/><stop offset="1" stop-color="#ffd60a"/>
+                <stop offset="0" stop-color="#ff9f0a"></stop><stop offset="1" stop-color="#ffd60a"></stop>
               </linearGradient>
             </defs>
 
             <!-- 背景几何 -->
-            <circle cx="470" cy="112" r="72" fill="#ff9f0a" opacity=".1"/>
-            <rect x="52" y="230" width="104" height="104" rx="26" fill="#ff9f0a" opacity=".09"/>
-            <path d="M520 40l16 27h-32z" fill="#ff9f0a" opacity=".16"/>
-            <rect x="60" y="48" width="11" height="11" rx="3" fill="none" stroke="#d97a06" stroke-width="1.4" opacity=".4"/>
+            <circle cx="470" cy="112" r="72" fill="#ff9f0a" opacity=".1"></circle>
+            <rect x="52" y="230" width="104" height="104" rx="26" fill="#ff9f0a" opacity=".09"></rect>
+            <path d="M520 40l16 27h-32z" fill="#ff9f0a" opacity=".16"></path>
+            <rect x="60" y="48" width="11" height="11" rx="3" fill="none" stroke="#d97a06" stroke-width="1.4" opacity=".4"></rect>
 
             <!-- 烟 -->
             <g class="smoke" fill="none" stroke="#b98a5a" stroke-width="3" stroke-linecap="round" opacity=".4">
-              <path class="s1" d="M212 128c-14-16 10-26 0-44s8-26 0-40"/>
-              <path class="s2" d="M300 108c-16-18 12-30 0-50s10-30 0-46"/>
-              <path class="s3" d="M388 130c-14-16 10-26 0-44s8-24 0-38"/>
+              <path class="s1" d="M212 128c-14-16 10-26 0-44s8-26 0-40"></path>
+              <path class="s2" d="M300 108c-16-18 12-30 0-50s10-30 0-46"></path>
+              <path class="s3" d="M388 130c-14-16 10-26 0-44s8-24 0-38"></path>
             </g>
 
             <!-- 三根签子 -->
             <g class="skewers">
               <g class="skew sk1">
-                <rect x="182" y="126" width="236" height="6" rx="3" fill="#c9a06a"/>
-                <rect x="198" y="132" width="42" height="24" rx="10" fill="#e0703c"/>
-                <rect x="252" y="132" width="42" height="24" rx="10" fill="#f0a04b"/>
-                <rect x="306" y="132" width="42" height="24" rx="10" fill="#e0703c"/>
+                <rect x="182" y="126" width="236" height="6" rx="3" fill="#c9a06a"></rect>
+                <rect x="198" y="132" width="42" height="24" rx="10" fill="#e0703c"></rect>
+                <rect x="252" y="132" width="42" height="24" rx="10" fill="#f0a04b"></rect>
+                <rect x="306" y="132" width="42" height="24" rx="10" fill="#e0703c"></rect>
               </g>
               <g class="skew sk2">
-                <rect x="196" y="170" width="236" height="6" rx="3" fill="#c9a06a"/>
-                <rect x="212" y="176" width="40" height="24" rx="10" fill="#f0a04b"/>
-                <rect x="264" y="176" width="40" height="24" rx="10" fill="#e0703c"/>
-                <rect x="316" y="176" width="40" height="24" rx="10" fill="#f0a04b"/>
+                <rect x="196" y="170" width="236" height="6" rx="3" fill="#c9a06a"></rect>
+                <rect x="212" y="176" width="40" height="24" rx="10" fill="#f0a04b"></rect>
+                <rect x="264" y="176" width="40" height="24" rx="10" fill="#e0703c"></rect>
+                <rect x="316" y="176" width="40" height="24" rx="10" fill="#f0a04b"></rect>
               </g>
               <g class="skew sk3">
-                <rect x="184" y="214" width="236" height="6" rx="3" fill="#c9a06a"/>
-                <rect x="200" y="220" width="42" height="24" rx="10" fill="#d95f2b"/>
-                <rect x="254" y="220" width="42" height="24" rx="10" fill="#f0a04b"/>
-                <rect x="308" y="220" width="42" height="24" rx="10" fill="#d95f2b"/>
+                <rect x="184" y="214" width="236" height="6" rx="3" fill="#c9a06a"></rect>
+                <rect x="200" y="220" width="42" height="24" rx="10" fill="#d95f2b"></rect>
+                <rect x="254" y="220" width="42" height="24" rx="10" fill="#f0a04b"></rect>
+                <rect x="308" y="220" width="42" height="24" rx="10" fill="#d95f2b"></rect>
               </g>
             </g>
 
             <!-- 烤炉 -->
             <g class="grill">
-              <rect x="132" y="256" width="336" height="26" rx="9" fill="url(#gGrill)"/>
+              <rect x="132" y="256" width="336" height="26" rx="9" fill="url(#gGrill)"></rect>
               <g stroke="#ffb340" stroke-width="3.4" stroke-linecap="round" opacity=".65">
-                <path d="M170 269h44M246 269h44M322 269h44M398 269h40"/>
+                <path d="M170 269h44M246 269h44M322 269h44M398 269h40"></path>
               </g>
-              <path d="M160 282h20l22 62h-64z" fill="#2b2b2f"/>
-              <path d="M420 282h20l22 62h-64z" fill="#2b2b2f"/>
-              <rect x="120" y="340" width="360" height="12" rx="6" fill="#3a3a3e"/>
+              <path d="M160 282h20l22 62h-64z" fill="#2b2b2f"></path>
+              <path d="M420 282h20l22 62h-64z" fill="#2b2b2f"></path>
+              <rect x="120" y="340" width="360" height="12" rx="6" fill="#3a3a3e"></rect>
               <!-- 炉火 -->
               <g class="fire">
-                <path class="f1" d="M300 344c-22-14-16-40-4-52 0 14 8 18 8 18s12-10 6-30c22 12 30 34 18 50-8 11-20 12-28 14z" fill="url(#gFire)" opacity=".9"/>
-                <path class="f2" d="M264 346c-12-8-9-22-2-29 0 8 5 10 5 10s6-6 3-17c12 7 17 19 10 28-4 6-11 7-16 8z" fill="url(#gFire)" opacity=".62"/>
-                <path class="f3" d="M338 346c-12-8-9-22-2-29 0 8 5 10 5 10s6-6 3-17c12 7 17 19 10 28-4 6-11 7-16 8z" fill="url(#gFire)" opacity=".62"/>
+                <path class="f1" d="M300 344c-22-14-16-40-4-52 0 14 8 18 8 18s12-10 6-30c22 12 30 34 18 50-8 11-20 12-28 14z" fill="url(#gFire)" opacity=".9"></path>
+                <path class="f2" d="M264 346c-12-8-9-22-2-29 0 8 5 10 5 10s6-6 3-17c12 7 17 19 10 28-4 6-11 7-16 8z" fill="url(#gFire)" opacity=".62"></path>
+                <path class="f3" d="M338 346c-12-8-9-22-2-29 0 8 5 10 5 10s6-6 3-17c12 7 17 19 10 28-4 6-11 7-16 8z" fill="url(#gFire)" opacity=".62"></path>
               </g>
             </g>
 
@@ -261,43 +288,42 @@
             <span class="tag mono">26.1 / 26.1.1 / 26.1.2</span>
             <span class="tag">移植</span>
           </div>
-          <h2 class="p-title">Barbeque's Delight</h2>
-          <p class="p-sum">
+          <h2 class="p-title" data-i18n-key="p2.title">Barbeque's Delight</h2>
+          <p class="p-sum" data-i18n-html-key="p2.sum">
             把 MaoMao 的 Farmer's Delight 附属模组《Barbeque's Delight》从
             <b style="color:var(--ink)">Minecraft 1.20.1 / Fabric / Yarn</b> 移植到
             <b style="color:var(--ink)">Minecraft 26.1</b>。玩法、机制与贴图与原版 1.1.0 保持一致 ——
             这是移植，不是重做。
           </p>
           <ul class="highlights">
-            <li><b>烤架（Grill）</b>：左右两半各自独立。空手右键放食材，潜行右键翻面 —— 但只有至少半熟时才接受翻面</li>
-            <li><b>翻面即成品，不翻就烤糊</b>：翻面后烤成配方产物，放着不管会变成 <code>burnt_food</code></li>
-            <li><b>必须加热</b>：下方需要热源（比如营火）。烧烤配方优先于原版营火配方，后者作为兜底（<code>cookingTime − 200</code>）</li>
-            <li><b>食材盆（Ingredients Basin）</b>：同样分两半，右键存放食材，主手持木棍、副手可加配料，右键串成串</li>
-            <li><b>内容规模</b>：3 种方块（烤架 / 食材盆 / 托盘）、9 种生串、9 种烤串、6 种调味粉与酱料，外加卷饼、三明治、石锅拌饭与烤肉村民交易</li>
-            <li><b>一个 jar 覆盖三个版本</b>：<code>"minecraft": "~26.1"</code> 在 Fabric 语义下等于 <code>[26.1, 26.2)</code>，正好覆盖 26.1 / 26.1.1 / 26.1.2</li>
+            <li data-i18n-html-key="p2.h1"><b>烤架（Grill）</b>：左右两半各自独立。空手右键放食材，潜行右键翻面 —— 但只有至少半熟时才接受翻面</li>
+            <li data-i18n-html-key="p2.h2"><b>翻面即成品，不翻就烤糊</b>：翻面后烤成配方产物，放着不管会变成 <code>burnt_food</code></li>
+            <li data-i18n-html-key="p2.h3"><b>必须加热</b>：下方需要热源（比如营火）。烧烤配方优先于原版营火配方，后者作为兜底（<code>cookingTime − 200</code>）</li>
+            <li data-i18n-html-key="p2.h4"><b>食材盆（Ingredients Basin）</b>：同样分两半，右键存放食材，主手持木棍、副手可加配料，右键串成串</li>
+            <li data-i18n-html-key="p2.h5"><b>内容规模</b>：3 种方块（烤架 / 食材盆 / 托盘）、9 种生串、9 种烤串、6 种调味粉与酱料，外加卷饼、三明治、石锅拌饭与烤肉村民交易</li>
+            <li data-i18n-html-key="p2.h6"><b>一个 jar 覆盖三个版本</b>：<code>"minecraft": "~26.1"</code> 在 Fabric 语义下等于 <code>[26.1, 26.2)</code>，正好覆盖 26.1 / 26.1.1 / 26.1.2</li>
           </ul>
 
           <div class="facts">
-            <div class="fact"><div class="fk">运行环境</div><div class="fv">Fabric Loader 0.19+<small>Java 25 或更新</small></div></div>
-            <div class="fact"><div class="fk">前置依赖</div><div class="fv">Farmer's Delight Refabricated<small>26.1-3.6.0+ · 不随包附带</small></div></div>
-            <div class="fact"><div class="fk">发行版</div><div class="fv">152 KB · jar<small>tag v1.1.0-fabric+26.1mc</small></div></div>
+            <div class="fact"><div class="fk" data-i18n-key="p2.f1k">运行环境</div><div class="fv" data-i18n-key="p2.f1v">Fabric Loader 0.19+<small>Java 25 或更新</small></div></div>
+            <div class="fact"><div class="fk" data-i18n-key="p2.f2k">前置依赖</div><div class="fv" data-i18n-key="p2.f2v">Farmer's Delight Refabricated<small>26.1-3.6.0+ · 不随包附带</small></div></div>
+            <div class="fact"><div class="fk" data-i18n-key="p2.f3k">发行版</div><div class="fv" data-i18n-key="p2.f3v">152 KB · jar<small>tag v1.1.0-fabric+26.1mc</small></div></div>
           </div>
 
-          <p class="note-line">
+          <p class="note-line" data-i18n-html-key="p2.note">
             <b>版权说明</b>：这是<b>非官方移植</b>。模组的设计、美术与玩法版权全部属于原作者
             MaoMao（Aomiaomao），上游仓库为 <code>AOMIAOMAO/BarbequesDelight</code>，
             本仓库只增加了 26.1 的适配部分。
           </p>
 
           <div class="dl-row">
-            <a class="btn-download" data-download="https://github.com/Wenjun6326/BarbequesDelight/releases/download/v1.1.0-fabric%2B26.1mc/barbeques-delight-1.1.0-mc26.1.jar"
-               download="barbeques-delight-1.1.0-mc26.1.jar" href="#">
+            <a class="btn-download" data-download="https://github.com/Wenjun6326/BarbequesDelight/releases/download/v1.1.0-fabric%2B26.1mc/barbeques-delight-1.1.0-mc26.1.jar" download="barbeques-delight-1.1.0-mc26.1.jar" data-dl-key="p2.dlName" href="#" data-i18n-key="p2.dl">
               <span class="spin"></span>
-              <svg class="dl-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0 4.5-4.5M12 15l-4.5-4.5M5 19h14"/></svg>
+              <svg class="dl-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0 4.5-4.5M12 15l-4.5-4.5M5 19h14"></path></svg>
               下载 jar（152 KB）
             </a>
-            <a class="repo-link" href="https://github.com/Wenjun6326/BarbequesDelight" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+            <a class="repo-link" href="https://github.com/Wenjun6326/BarbequesDelight" target="_blank" rel="noopener noreferrer" data-i18n-key="p2.repo">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path></svg>
               查看仓库
             </a>
           <p class="dl-hint"></p></div>
@@ -314,78 +340,78 @@
           <svg viewBox="0 0 600 380" role="img" aria-label="世界风味美食示意图：米饭碗、卷饼、牛油果、玉米与黄瓜">
             <defs>
               <linearGradient id="gBowl" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#1f6f47"/><stop offset="1" stop-color="#12513a"/>
+                <stop offset="0" stop-color="#1f6f47"></stop><stop offset="1" stop-color="#12513a"></stop>
               </linearGradient>
               <linearGradient id="gRice" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#fffdf6"/><stop offset="1" stop-color="#e8e2d2"/>
+                <stop offset="0" stop-color="#fffdf6"></stop><stop offset="1" stop-color="#e8e2d2"></stop>
               </linearGradient>
             </defs>
 
             <!-- 背景几何 -->
-            <circle cx="146" cy="112" r="70" fill="#30d158" opacity=".1"/>
-            <rect x="424" y="60" width="104" height="104" rx="26" fill="#30d158" opacity=".08"/>
-            <path d="M64 300l22-38 22 38z" fill="#30d158" opacity=".13"/>
-            <circle cx="534" cy="286" r="26" fill="none" stroke="#1f9e52" stroke-width="1.5" opacity=".3"/>
-            <rect x="40" y="180" width="11" height="11" rx="3" fill="none" stroke="#1f9e52" stroke-width="1.4" opacity=".35"/>
+            <circle cx="146" cy="112" r="70" fill="#30d158" opacity=".1"></circle>
+            <rect x="424" y="60" width="104" height="104" rx="26" fill="#30d158" opacity=".08"></rect>
+            <path d="M64 300l22-38 22 38z" fill="#30d158" opacity=".13"></path>
+            <circle cx="534" cy="286" r="26" fill="none" stroke="#1f9e52" stroke-width="1.5" opacity=".3"></circle>
+            <rect x="40" y="180" width="11" height="11" rx="3" fill="none" stroke="#1f9e52" stroke-width="1.4" opacity=".35"></rect>
 
             <!-- 蒸汽 -->
             <g class="steam" fill="none" stroke="#8fbfa4" stroke-width="3" stroke-linecap="round" opacity=".5">
-              <path class="st1" d="M238 118c-12-14 9-23 0-38s7-22 0-34"/>
-              <path class="st2" d="M300 104c-13-16 10-25 0-42s8-24 0-37"/>
-              <path class="st3" d="M362 118c-12-14 9-23 0-38s7-22 0-34"/>
+              <path class="st1" d="M238 118c-12-14 9-23 0-38s7-22 0-34"></path>
+              <path class="st2" d="M300 104c-13-16 10-25 0-42s8-24 0-37"></path>
+              <path class="st3" d="M362 118c-12-14 9-23 0-38s7-22 0-34"></path>
             </g>
 
             <!-- 米饭碗 -->
             <g class="bowl">
               <!-- 碗身后沿 -->
-              <ellipse cx="300" cy="168" rx="106" ry="24" fill="#0d3d2b"/>
+              <ellipse cx="300" cy="168" rx="106" ry="24" fill="#0d3d2b"></ellipse>
               <!-- 冒尖的米饭 -->
-              <ellipse cx="300" cy="166" rx="93" ry="21" fill="#fffdf7"/>
-              <ellipse cx="300" cy="159" rx="85" ry="24" fill="#fffdf7"/>
-              <ellipse cx="300" cy="154" rx="64" ry="18" fill="#ffffff"/>
+              <ellipse cx="300" cy="166" rx="93" ry="21" fill="#fffdf7"></ellipse>
+              <ellipse cx="300" cy="159" rx="85" ry="24" fill="#fffdf7"></ellipse>
+              <ellipse cx="300" cy="154" rx="64" ry="18" fill="#ffffff"></ellipse>
               <!-- 碗身 -->
-              <path d="M194 166h212c0 58-47 96-106 96s-106-38-106-96z" fill="url(#gBowl)"/>
-              <path d="M218 186c-7 22 1 44 19 59" fill="none" stroke="#7fd0a4" stroke-width="4" stroke-linecap="round" opacity=".32"/>
-              <ellipse cx="300" cy="261" rx="106" ry="15" fill="#0b3324" opacity=".5"/>
+              <path d="M194 166h212c0 58-47 96-106 96s-106-38-106-96z" fill="url(#gBowl)"></path>
+              <path d="M218 186c-7 22 1 44 19 59" fill="none" stroke="#7fd0a4" stroke-width="4" stroke-linecap="round" opacity=".32"></path>
+              <ellipse cx="300" cy="261" rx="106" ry="15" fill="#0b3324" opacity=".5"></ellipse>
               <!-- 配菜 -->
-              <circle cx="262" cy="156" r="10" fill="#ff6b6b"/>
-              <circle cx="334" cy="151" r="8" fill="#ffd93d"/>
-              <circle cx="298" cy="149" r="7" fill="#5ac37e"/>
-              <path d="M278 146c7-7 18-7 25 0" fill="none" stroke="#5ac37e" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="262" cy="156" r="10" fill="#ff6b6b"></circle>
+              <circle cx="334" cy="151" r="8" fill="#ffd93d"></circle>
+              <circle cx="298" cy="149" r="7" fill="#5ac37e"></circle>
+              <path d="M278 146c7-7 18-7 25 0" fill="none" stroke="#5ac37e" stroke-width="3" stroke-linecap="round"></path>
               <!-- 斜插在碗里的筷子 -->
               <g class="chopsticks">
-                <path d="M232 138L172 78" stroke="#b98a4e" stroke-width="6" stroke-linecap="round"/>
-                <path d="M250 156L196 102" stroke="#d9ab6a" stroke-width="6" stroke-linecap="round"/>
+                <path d="M232 138L172 78" stroke="#b98a4e" stroke-width="6" stroke-linecap="round"></path>
+                <path d="M250 156L196 102" stroke="#d9ab6a" stroke-width="6" stroke-linecap="round"></path>
               </g>
             </g>
 
             <!-- 牛油果（左下） -->
             <g class="avo">
-              <ellipse cx="112" cy="272" rx="46" ry="56" fill="#7fbf5a" transform="rotate(-14 112 272)"/>
-              <ellipse cx="112" cy="274" rx="33" ry="42" fill="#c9e8a8" transform="rotate(-14 112 274)"/>
-              <circle cx="112" cy="288" r="19" fill="#a9703f"/>
-              <circle cx="112" cy="288" r="19" fill="none" stroke="#8a5730" stroke-width="2" opacity=".5"/>
+              <ellipse cx="112" cy="272" rx="46" ry="56" fill="#7fbf5a" transform="rotate(-14 112 272)"></ellipse>
+              <ellipse cx="112" cy="274" rx="33" ry="42" fill="#c9e8a8" transform="rotate(-14 112 274)"></ellipse>
+              <circle cx="112" cy="288" r="19" fill="#a9703f"></circle>
+              <circle cx="112" cy="288" r="19" fill="none" stroke="#8a5730" stroke-width="2" opacity=".5"></circle>
             </g>
 
             <!-- 玉米（右下） -->
             <g class="corn">
-              <ellipse cx="486" cy="276" rx="34" ry="62" fill="#f5c542" transform="rotate(16 486 276)"/>
+              <ellipse cx="486" cy="276" rx="34" ry="62" fill="#f5c542" transform="rotate(16 486 276)"></ellipse>
               <g fill="#e0a92c" opacity=".7">
-                <circle cx="474" cy="242" r="4"/><circle cx="492" cy="250" r="4"/>
-                <circle cx="470" cy="266" r="4"/><circle cx="488" cy="274" r="4"/>
-                <circle cx="472" cy="292" r="4"/><circle cx="492" cy="300" r="4"/>
-                <circle cx="502" cy="262" r="4"/><circle cx="504" cy="286" r="4"/>
+                <circle cx="474" cy="242" r="4"></circle><circle cx="492" cy="250" r="4"></circle>
+                <circle cx="470" cy="266" r="4"></circle><circle cx="488" cy="274" r="4"></circle>
+                <circle cx="472" cy="292" r="4"></circle><circle cx="492" cy="300" r="4"></circle>
+                <circle cx="502" cy="262" r="4"></circle><circle cx="504" cy="286" r="4"></circle>
               </g>
-              <path d="M460 300c-22 8-40-2-46-18 18-4 34 2 46 18z" fill="#4fae5a"/>
-              <path d="M516 240c20-12 40-6 48 10-18 6-36 2-48-10z" fill="#4fae5a"/>
+              <path d="M460 300c-22 8-40-2-46-18 18-4 34 2 46 18z" fill="#4fae5a"></path>
+              <path d="M516 240c20-12 40-6 48 10-18 6-36 2-48-10z" fill="#4fae5a"></path>
             </g>
 
             <!-- 卷饼（右上） -->
             <g class="wrap">
-              <path d="M424 96c34-16 68-6 78 22s-10 50-42 54-62-16-64-42 6-24 28-34z" fill="#e8c07a"/>
-              <path d="M436 108c22-10 44-4 52 16s-6 32-28 36-42-10-44-28 4-16 20-24z" fill="#f2d79b"/>
-              <path d="M452 122c12-4 24 0 28 10s-4 16-16 18-22-4-24-14 4-10 12-14z" fill="#d96b4a"/>
-              <path d="M446 136c10-6 22-4 26 4" fill="none" stroke="#6fbf73" stroke-width="3" stroke-linecap="round"/>
+              <path d="M424 96c34-16 68-6 78 22s-10 50-42 54-62-16-64-42 6-24 28-34z" fill="#e8c07a"></path>
+              <path d="M436 108c22-10 44-4 52 16s-6 32-28 36-42-10-44-28 4-16 20-24z" fill="#f2d79b"></path>
+              <path d="M452 122c12-4 24 0 28 10s-4 16-16 18-22-4-24-14 4-10 12-14z" fill="#d96b4a"></path>
+              <path d="M446 136c10-6 22-4 26 4" fill="none" stroke="#6fbf73" stroke-width="3" stroke-linecap="round"></path>
             </g>
 
             <text x="196" y="352" fill="#3f7a58" font-size="12" font-family="ui-monospace,Menlo,Consolas,monospace">72 items · 4 crops · 1 tree</text>
@@ -401,42 +427,41 @@
             <span class="tag mono">26.1 fabric</span>
             <span class="tag">适配</span>
           </div>
-          <h2 class="p-title">Cultural Delights</h2>
-          <p class="p-sum">
+          <h2 class="p-title" data-i18n-key="p3.title">Cultural Delights</h2>
+          <p class="p-sum" data-i18n-html-key="p3.sum">
             NCP Bails 的 Farmer's Delight 附属模组《Cultural Delights》——
             一个把世界各地风味食物做进 Minecraft 的食物系统。这个仓库的工作是把它
             <b style="color:var(--ink)">适配到 Minecraft 1.21.1</b>，后续又追加了一个
             <b style="color:var(--ink)">26.1 Fabric 分支</b>。
           </p>
           <ul class="highlights">
-            <li><b>四种作物 + 一棵树</b>：玉米、黄瓜、茄子（含白茄子）可以种，牛油果是完整树木 —— 原木、树叶、树苗、果核、盆栽一应俱全</li>
-            <li><b>72 个物品模型</b>：牛油果吐司、墨西哥卷、塔可、恩潘纳达、加州卷、味噌汤、石锅拌饭、爆米花、腌黄瓜、烟熏系列……</li>
-            <li><b>世界生成</b>：野生的玉米、黄瓜与茄子会自然生成在地图里，配套的 Configured / Placed Feature 与生物群系修饰器都写好了</li>
-            <li><b>数据生成</b>：<code>DataGenerators</code> 负责模型、配方、战利品表与数据包的自动产出，改一处不用手改十份 JSON</li>
-            <li><b>1.21.1 适配内容</b>：NeoForge 21.1.219 + Parchment 2024.11.17 映射，<code>mod_version 0.17.8</code></li>
-            <li><b>额外分支</b>：<code>26.1-fabric</code> 分支上有一个提交 —— <code>Port to Minecraft 26.1 (Fabric)</code>，把整个模组再搬到新版本</li>
+            <li data-i18n-html-key="p3.h1"><b>四种作物 + 一棵树</b>：玉米、黄瓜、茄子（含白茄子）可以种，牛油果是完整树木 —— 原木、树叶、树苗、果核、盆栽一应俱全</li>
+            <li data-i18n-html-key="p3.h2"><b>72 个物品模型</b>：牛油果吐司、墨西哥卷、塔可、恩潘纳达、加州卷、味噌汤、石锅拌饭、爆米花、腌黄瓜、烟熏系列……</li>
+            <li data-i18n-html-key="p3.h3"><b>世界生成</b>：野生的玉米、黄瓜与茄子会自然生成在地图里，配套的 Configured / Placed Feature 与生物群系修饰器都写好了</li>
+            <li data-i18n-html-key="p3.h4"><b>数据生成</b>：<code>DataGenerators</code> 负责模型、配方、战利品表与数据包的自动产出，改一处不用手改十份 JSON</li>
+            <li data-i18n-html-key="p3.h5"><b>1.21.1 适配内容</b>：NeoForge 21.1.219 + Parchment 2024.11.17 映射，<code>mod_version 0.17.8</code></li>
+            <li data-i18n-html-key="p3.h6"><b>额外分支</b>：<code>26.1-fabric</code> 分支上有一个提交 —— <code>Port to Minecraft 26.1 (Fabric)</code>，把整个模组再搬到新版本</li>
           </ul>
 
           <div class="facts">
-            <div class="fact"><div class="fk">加载器</div><div class="fv">NeoForge 21.1.219<small>Minecraft 1.21.1</small></div></div>
-            <div class="fact"><div class="fk">代码量</div><div class="fv">469 个文件<small>Java 约 81 KB · 22 个类</small></div></div>
-            <div class="fact"><div class="fk">发行版</div><div class="fv">302 KB · jar<small>另有 268 KB sources jar</small></div></div>
+            <div class="fact"><div class="fk" data-i18n-key="p3.f1k">加载器</div><div class="fv" data-i18n-key="p3.f1v">NeoForge 21.1.219<small>Minecraft 1.21.1</small></div></div>
+            <div class="fact"><div class="fk" data-i18n-key="p3.f2k">代码量</div><div class="fv" data-i18n-key="p3.f2v">469 个文件<small>Java 约 81 KB · 22 个类</small></div></div>
+            <div class="fact"><div class="fk" data-i18n-key="p3.f3k">发行版</div><div class="fv" data-i18n-key="p3.f3v">302 KB · jar<small>另有 268 KB sources jar</small></div></div>
           </div>
 
-          <p class="note-line">
+          <p class="note-line" data-i18n-html-key="p3.note">
             <b>版权说明</b>：原模组由 NCP Bails 开发，美术来自 NCP Bails、Raspmary、Bagels、Nive，
             许可证为 <b>All Rights Reserved</b>。本仓库做的是版本适配与移植工作，不是原创模组。
           </p>
 
           <div class="dl-row">
-            <a class="btn-download" data-download="https://github.com/Wenjun6326/Cultural-Delights-1.21/releases/download/culturaldelight%2B26.1fabric/culturaldelights-0.17.8%2B26.1.jar"
-               download="culturaldelights-0.17.8+26.1.jar" href="#">
+            <a class="btn-download" data-download="https://github.com/Wenjun6326/Cultural-Delights-1.21/releases/download/culturaldelight%2B26.1fabric/culturaldelights-0.17.8%2B26.1.jar" download="culturaldelights-0.17.8+26.1.jar" data-dl-key="p3.dlName" href="#" data-i18n-key="p3.dl">
               <span class="spin"></span>
-              <svg class="dl-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0 4.5-4.5M12 15l-4.5-4.5M5 19h14"/></svg>
+              <svg class="dl-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0 4.5-4.5M12 15l-4.5-4.5M5 19h14"></path></svg>
               下载 jar（302 KB）
             </a>
-            <a class="repo-link" href="https://github.com/Wenjun6326/Cultural-Delights-1.21" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+            <a class="repo-link" href="https://github.com/Wenjun6326/Cultural-Delights-1.21" target="_blank" rel="noopener noreferrer" data-i18n-key="p3.repo">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path></svg>
               查看仓库
             </a>
           <p class="dl-hint"></p></div>
@@ -450,31 +475,31 @@
   <section class="summary-band">
     <div class="wrap">
       <div class="center">
-        <p class="eyebrow reveal">小结</p>
-        <h2 class="big reveal d1">三件事，一个额度</h2>
-        <p class="lead reveal d2">
+        <p class="eyebrow reveal" data-i18n-key="sum.eyebrow">小结</p>
+        <h2 class="big reveal d1" data-i18n-key="sum.title">三件事，一个额度</h2>
+        <p class="lead reveal d2" data-i18n-key="sum.lead">
           硬件、模组移植、版本适配 —— 领域各不相同，共同点是自费支出都是 0。
         </p>
       </div>
       <div class="grid3">
         <div class="s-card reveal">
-          <b>动手的部分</b>
-          <p>ESP32 固件、网页管理面板、Python 测试脚本、Gradle 构建配置，能自己写的都自己写了。</p>
+          <b data-i18n-key="sum.c1t">动手的部分</b>
+          <p data-i18n-key="sum.c1p">ESP32 固件、网页管理面板、Python 测试脚本、Gradle 构建配置，能自己写的都自己写了。</p>
         </div>
         <div class="s-card reveal d1">
-          <b>诚实标注的部分</b>
-          <p>两个模组都是移植与适配，原作者与美术作者都写在页面上了 —— 这不该被含糊过去。</p>
+          <b data-i18n-key="sum.c2t">诚实标注的部分</b>
+          <p data-i18n-key="sum.c2p">两个模组都是移植与适配，原作者与美术作者都写在页面上了 —— 这不该被含糊过去。</p>
         </div>
         <div class="s-card reveal d2">
-          <b>李老师的部分</b>
-          <p>以上全部产出的算力与 Token，由李老师赞助。谢谢李老师。</p>
+          <b data-i18n-key="sum.c3t">李老师的部分</b>
+          <p data-i18n-key="sum.c3p">以上全部产出的算力与 Token，由李老师赞助。谢谢李老师。</p>
         </div>
       </div>
 
       <div class="center" style="margin-top:52px">
         <div class="btns">
-          <a class="btn btn-solid btn-lg" href="../index.html" data-magnetic>回到个人主页 <span class="arr">›</span></a>
-          <a class="btn btn-ghost btn-lg" href="../index.html#tokens">看看 Token 账单</a>
+          <a class="btn btn-solid btn-lg" href="../index.html" data-magnetic="" data-i18n-html-key="sum.cta">回到个人主页 <span class="arr">›</span></a>
+          <a class="btn btn-ghost btn-lg" href="../index.html#tokens" data-i18n-key="sum.cta2">看看 Token 账单</a>
         </div>
       </div>
     </div>
@@ -485,7 +510,7 @@
 <footer>
   <div class="wrap">
     <div class="foot-note" style="border:none;padding-top:0">
-      <span>Copyright © <span data-year>2026</span> 欧阳文钧 · 本项目由李老师的 Token 额度赞助</span>
+      <span data-i18n-key="proj.foot">Copyright © <span data-year="">2026</span> 欧阳文钧 · 本项目由李老师的 Token 额度赞助</span>
       <span><a href="https://github.com/Wenjun6326" target="_blank" rel="noopener noreferrer">github.com/Wenjun6326</a></span>
     </div>
   </div>
@@ -535,6 +560,9 @@
 }
 </style>
 
-<script src="../app.js?v=20261007b"></script>
-</body>
-</html>
+<script src="../app.js?v=20261007c"></script>
+
+
+
+
+</body></html>

@@ -1,0 +1,203 @@
+/* =========================================================
+   语言与主题模块
+   - 暗色模式：跟随系统 + 手动切换（localStorage 记忆）
+   - 中英双语：data-i18n-key / data-i18n-html-key / data-i18n-attr 标记 + 字典替换
+   暴露 window.DSH_I18N.t() 供 app.js 拼接动态文案
+   ========================================================= */
+(function () {
+  "use strict";
+
+  var LS_LANG = "wenjun.lang";
+  var LS_THEME = "wenjun.theme";
+  var root = document.documentElement;
+
+  /* ================= 主题 ================= */
+  function systemDark() {
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+  function resolveTheme(pref) {
+    return (pref === "light" || pref === "dark") ? pref : (systemDark() ? "dark" : "light");
+  }
+  function readThemePref() {
+    try { return localStorage.getItem(LS_THEME) || "auto"; } catch (e) { return "auto"; }
+  }
+  function applyTheme(pref) {
+    var t = resolveTheme(pref);
+    root.setAttribute("data-theme", t);
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", t === "dark" ? "#000000" : "#f5f5f7");
+    var btn = document.getElementById("themeToggle");
+    if (btn) {
+      btn.classList.toggle("is-dark", t === "dark");
+      var label = t === "dark" ? "切换到浅色模式 / Light mode" : "切换到深色模式 / Dark mode";
+      btn.setAttribute("aria-label", label);
+      btn.setAttribute("title", label);
+    }
+  }
+  function setThemePref(pref) {
+    try { localStorage.setItem(LS_THEME, pref); } catch (e) {}
+    applyTheme(pref);
+  }
+
+  window.__WJ_APPLY_THEME__ = applyTheme;
+  applyTheme(readThemePref());
+
+  if (window.matchMedia) {
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    var onSchemeChange = function () { if (readThemePref() === "auto") applyTheme("auto"); };
+    if (mq.addEventListener) mq.addEventListener("change", onSchemeChange);
+    else if (mq.addListener) mq.addListener(onSchemeChange);
+  }
+
+  /* ================= 语言 ================= */
+  var DICT = window.WJ_I18N || {};
+  var ZH = { text: {}, html: {}, attr: {}, title: null, desc: null };
+  var bound = false;
+
+  function readLang() {
+    try {
+      var v = localStorage.getItem(LS_LANG);
+      if (v === "en" || v === "zh") return v;
+    } catch (e) {}
+    return (navigator.language || "zh").toLowerCase().indexOf("zh") === 0 ? "zh" : "en";
+  }
+
+  function eachText(cb) {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-i18n-key]"), function (el) {
+      /* 磁吸元素的内容由 app.js 按语言重新拆分，这里只负责写入文本 */
+      cb(el, el.getAttribute("data-i18n-key"), el.hasAttribute("data-magnet") ? "magnet" : "text");
+    });
+  }
+  function eachHtml(cb) {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-i18n-html-key]"), function (el) {
+      cb(el, el.getAttribute("data-i18n-html-key"), "html");
+    });
+  }
+  /* 运行期动态文案：内容由 JS 改写（余额、日志、状态、按钮），
+     但切换语言时仍需跟随，因此单独用 data-tkey 标记 */
+  function eachRuntime(cb) {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-tkey]"), function (el) {
+      cb(el, el.getAttribute("data-tkey"), "text");
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-tkey-html]"), function (el) {
+      cb(el, el.getAttribute("data-tkey-html"), "html");
+    });
+  }
+  function eachAttr(cb) {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-i18n-attr]"), function (el) {
+      el.getAttribute("data-i18n-attr").split(";").forEach(function (pair) {
+        var i = pair.indexOf(":");
+        if (i < 1) return;
+        cb(el, pair.slice(0, i).trim(), pair.slice(i + 1).trim());
+      });
+    });
+  }
+
+  /* 首次运行：把中文原文存下来，供切回中文时还原 */
+  function snapshot() {
+    eachText(function (el, k) { if (!(k in ZH.text)) ZH.text[k] = el.textContent; });
+    eachHtml(function (el, k) { if (!(k in ZH.html)) ZH.html[k] = el.innerHTML; });
+    eachRuntime(function (el, k, kind) {
+      var key = "rt:" + kind + ":" + k;
+      if (!(key in ZH.text)) ZH.text[key] = kind === "html" ? el.innerHTML : el.textContent;
+    });
+    eachAttr(function (el, attr, k) {
+      var key = attr + "|" + k;
+      if (!(key in ZH.attr)) ZH.attr[key] = el.getAttribute(attr) || "";
+    });
+    var tm = document.querySelector('meta[name="i18n-title"]');
+    if (tm) { ZH.title = tm.getAttribute("data-zh") || document.title; }
+    var dm = document.querySelector('meta[name="description"]');
+    if (dm) {
+      ZH.desc = dm.getAttribute("content") || "";
+      if (!dm.getAttribute("data-en")) dm.setAttribute("data-en", ZH.desc);
+    }
+  }
+
+  function applyLang(lang) {
+    var isEn = lang === "en";
+    root.setAttribute("lang", isEn ? "en" : "zh-CN");
+
+    eachText(function (el, k) {
+      var v = isEn ? DICT[k] : ZH.text[k];
+      if (v == null) return;
+      if (el.hasAttribute("data-magnet")) {
+        /* 磁吸元素：写入纯文本并打标记，由 app.js 重新拆分为字符 */
+        el.setAttribute("data-magnet-text", v.trim());
+        el.textContent = v;
+      } else {
+        el.textContent = v;
+      }
+    });
+    eachHtml(function (el, k) {
+      var v = isEn ? DICT["html:" + k] : ZH.html[k];
+      if (v != null) el.innerHTML = v;
+    });
+    eachRuntime(function (el, k, kind) {
+      var v = isEn ? DICT[(kind === "html" ? "html:" : "") + k] : ZH.text["rt:" + kind + ":" + k];
+      if (v == null) return;
+      if (kind === "html") el.innerHTML = v; else el.textContent = v;
+    });
+    eachAttr(function (el, attr, k) {
+      var v = isEn ? DICT[k] : ZH.attr[attr + "|" + k];
+      if (v != null) el.setAttribute(attr, v);
+    });
+
+    var tm = document.querySelector('meta[name="i18n-title"]');
+    if (tm) {
+      var t = isEn ? tm.getAttribute("data-en") : (tm.getAttribute("data-zh") || ZH.title);
+      if (t) document.title = t;
+    }
+    var dm = document.querySelector('meta[name="description"]');
+    if (dm) {
+      var d = isEn ? dm.getAttribute("data-en") : ZH.desc;
+      if (d) dm.setAttribute("content", d);
+    }
+
+    Array.prototype.forEach.call(document.querySelectorAll(".lang-toggle"), function (btn) {
+      btn.classList.toggle("is-en", isEn);
+      var label = isEn ? "切换到中文 / Switch to Chinese" : "Switch to English / 切换到英文";
+      btn.setAttribute("aria-label", label);
+      btn.setAttribute("title", label);
+    });
+
+    window.DSH_I18N = {
+      lang: lang,
+      isEn: isEn,
+      t: function (key, fallback) {
+        if (!isEn) return fallback;
+        return DICT[key] != null ? DICT[key] : fallback;
+      }
+    };
+    document.dispatchEvent(new CustomEvent("langchange", { detail: { lang: lang } }));
+    /* 磁吸元素在收到 langchange 后重新拆分，需在其后重新量基线 */
+    requestAnimationFrame(function () {
+      if (window.__WJ_REMEASURE_MAGNET__) window.__WJ_REMEASURE_MAGNET__();
+    });
+  }
+
+  window.__WJ_SET_LANG__ = function (lang) {
+    try { localStorage.setItem(LS_LANG, lang); } catch (e) {}
+    applyLang(lang);
+  };
+
+  /* ================= 绑定 ================= */
+  function init() {
+    if (!bound) {
+      bound = true;
+      snapshot();
+      var tb = document.getElementById("themeToggle");
+      if (tb) tb.addEventListener("click", function () {
+        setThemePref(resolveTheme(readThemePref()) === "dark" ? "light" : "dark");
+      });
+      var lb = document.getElementById("langToggle");
+      if (lb) lb.addEventListener("click", function () {
+        window.__WJ_SET_LANG__(root.getAttribute("lang") === "en" ? "zh" : "en");
+      });
+    }
+    applyLang(readLang());
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();

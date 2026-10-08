@@ -8,6 +8,16 @@
   var reduceMotion = window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* 运行时文案：跟随语言模块的字典 */
+  function I18N() { return window.DSH_I18N || { isEn: false, t: function (k, f) { return f; } }; }
+  function T(key, fallback) { return I18N().t(key, fallback); }
+  /* 空格分隔的候选文案，按当前语言取一条 */
+  function TP(key, zhJoined) {
+    var i = I18N();
+    if (i.isEn && window.WJ_I18N && window.WJ_I18N[key]) return window.WJ_I18N[key].split("|");
+    return zhJoined.split("|");
+  }
+
   /* ---------------------------------------------------------
      1. 滚动进场
      --------------------------------------------------------- */
@@ -161,11 +171,15 @@
       return Array.from(text);
     }
 
-    targets.forEach(function (root) {
-      var text = (root.textContent || "").trim();
-      if (!text) return;
-      var label = root.closest("h1, h2, h3, b") || root;
-      if (!label.dataset.magnetRdy) label.dataset.magnetRdy = "1"; else return;
+    /* 每个磁吸元素的状态，供切换语言时按新文本重新拆分 */
+    var registry = [];
+
+    function build(root) {
+      var text = (root.getAttribute("data-magnet-text") || root.textContent || "").trim();
+      if (!text) return null;
+      root.setAttribute("data-magnet-text", text);
+      var label = root.closest("[data-magnet-label]") || root.closest("h1, h2, h3, b") || root;
+      if (!label.dataset.magnetLabel) label.setAttribute("data-magnet-label", "1");
 
       var chars = toChars(text);
       root.textContent = "";
@@ -231,14 +245,35 @@
         active = true; mx = e.pageX; my = e.pageY; wake();
       });
       label.addEventListener("pointerleave", function () { active = false; wake(); });
-      window.addEventListener("resize", measure);
 
-      measure();
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(function () { requestAnimationFrame(measure); });
-      }
-      setTimeout(measure, 800);
+      return { root: root, measure: measure };
+    }
+
+    Array.prototype.forEach.call(targets, function (root) {
+      var rec = build(root);
+      if (rec) registry.push(rec);
     });
+
+    /* 窗口变化后重新量基线 */
+    var remeasure = function () { registry.forEach(function (r) { if (r.measure) r.measure(); }); };
+    window.addEventListener("resize", remeasure);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { requestAnimationFrame(remeasure); });
+    }
+    setTimeout(remeasure, 800);
+
+    /* 切换语言：i18n 已写入新的纯文本，这里按它重新拆分，磁吸继续可用 */
+    document.addEventListener("langchange", function () {
+      registry = registry.filter(function (rec) {
+        if (!document.body.contains(rec.root)) return false;
+        var fresh = build(rec.root);
+        if (fresh) { rec.measure = fresh.measure; setTimeout(fresh.measure, 80); }
+        return !!fresh;
+      });
+    });
+
+    /* 供其它模块使用 */
+    window.__WJ_REMEASURE_MAGNET__ = remeasure;
   })();
 
   /* ---------------------------------------------------------
@@ -305,7 +340,8 @@
       btn.classList.add("loading", "flying");
       setTimeout(function () { btn.classList.remove("flying"); }, 640);
       if (hint) {
-        hint.textContent = "已开始下载 " + name + " —— 若没反应，请检查浏览器是否拦截了下载";
+        hint.textContent = T("run.dlStarted", "已开始下载") + " " + name + " — " +
+          T("run.dlBlocked", "若没反应，请检查浏览器是否拦截了下载");
         hint.classList.add("on");
         clearTimeout(hideTimer);
         hideTimer = setTimeout(function () { hint.classList.remove("on"); }, 8000);
@@ -317,7 +353,9 @@
       e.preventDefault();
       if (btn.classList.contains("loading")) return;
       var url = btn.getAttribute("data-download");
-      var name = btn.getAttribute("download") || "download";
+      /* 文件名跟随当前语言：英文用 ASCII 名，避免部分系统解压/安装异常 */
+      var key = btn.getAttribute("data-dl-key");
+      var name = (I18N.isEn && key && I18N.t(key, "")) ? I18N.t(key, "") : (btn.getAttribute("download") || "download");
       feedback(name);
 
       /* 方式一：真实 <a download> 元素点击 */
@@ -350,9 +388,10 @@
     var supportsVT = typeof document.startViewTransition === "function";
 
     function fadeOverlay() {
+      var dark = document.documentElement.getAttribute("data-theme") === "dark";
       var o = document.createElement("div");
       o.style.cssText = "position:fixed;inset:0;z-index:9999;pointer-events:none;" +
-        "background:#fbfbfd;opacity:0;transition:opacity .3s cubic-bezier(.22,.61,.36,1)";
+        "background:" + (dark ? "#000" : "#fbfbfd") + ";opacity:0;transition:opacity .3s cubic-bezier(.22,.61,.36,1)";
       document.body.appendChild(o);
       requestAnimationFrame(function () { o.style.opacity = "1"; });
       return o;
@@ -418,7 +457,7 @@
 
     var statsNumberEl = document.getElementById("statsNumber");
     var tokens = 128, grabbed = 0, lifetime = 400000000;
-    var notes = [
+    var NOTES_ZH = [
       "状态正常 · 正在等待下一次分发",
       "李老师刚刚上线了 · 机会窗口开启",
       "额度充足 · 建议继续保持礼貌",
@@ -426,6 +465,8 @@
       "李老师看了你一眼 · 但没说不行",
       "已进入长期合作模式 · 谢谢李老师"
     ];
+    function notes() { return TP("run.notes", NOTES_ZH.join("|")); }
+    var lastNoteIndex = -1;
     function fmt(n) { return n.toLocaleString("en-US"); }
     function renderLifetime() {
       if (statsNumberEl) statsNumberEl.textContent = lifetime.toLocaleString("en-US") + "+";
@@ -448,17 +489,28 @@
       logEl.appendChild(line);
       while (logEl.children.length > 6) logEl.removeChild(logEl.firstChild);
     }
+    function noteText(i) {
+      var n = notes();
+      if (n[i] != null) return n[i];
+      return TP("run.notes", NOTES_ZH.join("|"))[n.length - 1];
+    }
     function grab() {
       var gain = 32 + Math.floor(Math.random() * 96);
       tokens += gain; grabbed++; lifetime += gain;
       render(true); renderLifetime();
-      addLog("获取成功 · +" + fmt(gain) + " tokens <b>✓</b>");
-      if (noteEl) noteEl.textContent = notes[Math.min(grabbed, notes.length - 1)];
+      addLog(T("run.logOk", "获取成功") + " · +" + fmt(gain) + " tokens <b>✓</b>");
+      if (noteEl) { lastNoteIndex = Math.min(grabbed, 5); noteEl.textContent = noteText(lastNoteIndex); }
       if (btn1) {
-        btn1.textContent = "再获取一次 (+" + fmt(gain) + ")";
-        setTimeout(function () { btn1.textContent = "获取 Token"; }, 1600);
+        btn1.textContent = T("run.grabAgain", "再获取一次") + " (+" + fmt(gain) + ")";
+        setTimeout(function () { btn1.textContent = T("run.getToken", "获取 Token"); }, 1600);
       }
     }
+    /* 切换语言后，把当前状态文案同步成对应语言 */
+    document.addEventListener("langchange", function () {
+      if (btn1) btn1.textContent = T("run.getToken", "获取 Token");
+      if (noteEl && lastNoteIndex >= 0) noteEl.textContent = noteText(lastNoteIndex);
+      if (noteEl && lastNoteIndex < 0) noteEl.textContent = noteText(0);
+    });
     render(false); renderLifetime();
     if (btn1) btn1.addEventListener("click", grab);
   })();

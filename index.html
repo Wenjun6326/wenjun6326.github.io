@@ -1,12 +1,30 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<html><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f5f5f7">
+<script>
+/* 尽早决定主题与语言，避免首屏闪烁 */
+(function(){
+  try{
+    var d=document.documentElement, p=localStorage.getItem("wenjun.theme")||"auto";
+    var dark = p==="dark" || (p==="auto" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
+    d.setAttribute("data-theme", dark?"dark":"light");
+    if(dark){var m=document.querySelector('meta[name="theme-color"]'); if(m) m.setAttribute("content","#000000");}
+    var l=localStorage.getItem("wenjun.lang");
+    if(!l) l=(navigator.language||"zh").toLowerCase().indexOf("zh")===0?"zh":"en";
+    d.setAttribute("lang", l==="en"?"en":"zh-CN");
+  }catch(e){}
+})();
+</script>
 <meta name="description" content="欧阳文钧的个人主页：爱好是白嫖李老师的东西（Token），以及用这些额度做出来的三个项目 —— ESP32-S3 无线测试平台与两个 Minecraft 模组移植。">
 <title>欧阳文钧 · 首页</title>
-<link rel="stylesheet" href="styles.css?v=20261007b">
+<!-- i18n -->
+<meta name="i18n-title" data-zh="欧阳文钧 · 首页" data-en="Ouyang Wenjun · Home">
+<meta name="description" content="欧阳文钧的个人主页：爱好是白嫖李老师的东西（Token），以及用这些额度做出来的三个项目 —— ESP32-S3 无线测试平台与两个 Minecraft 模组移植。" data-en="Ouyang Wenjun's personal homepage: freeloading tokens off Mr. Li, and the three projects built with that quota — an ESP32-S3 wireless testbed and two Minecraft mod ports.">
+<link rel="stylesheet" href="styles.css?v=20261007c">
+<script src="assets/i18n-dict.js?v=20261007c"></script>
+<script src="assets/i18n-theme.js?v=20261007c"></script>
 </head>
 <body>
 
@@ -14,12 +32,22 @@
   <div class="inner">
     <a class="brand" href="index.html">欧阳文钧</a>
     <div class="links">
-      <a href="index.html" class="on">首页</a>
-      <a href="#intro">简介</a>
-      <a href="#tokens">Token</a>
-      <a href="#hobby">爱好</a>
-      <a href="projects/index.html">我的项目</a>
+      <a href="index.html" class="on" data-i18n-key="nav.home">首页</a>
+      <a href="#intro" data-i18n-key="nav.intro">简介</a>
+      <a href="#tokens" data-i18n-key="nav.tokens">Token</a>
+      <a href="#hobby" data-i18n-key="nav.hobby">爱好</a>
+      <a href="projects/index.html" data-i18n-key="nav.projects">我的项目</a>
       <a href="https://github.com/Wenjun6326" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <div class="nav-tools">
+      <button class="tool-btn lang-toggle" id="langToggle" type="button" aria-label="Switch to English">
+        <span class="lg lg-zh">中文</span><span class="lg lg-en">EN</span>
+      </button>
+      <button class="tool-btn theme-toggle" id="themeToggle" type="button" aria-label="切换到深色模式">
+        <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2.6v2.2M12 19.2v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.6 12h2.2M19.2 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"></path></svg>
+        <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.4A8.4 8.4 0 0 1 9.6 4a8.4 8.4 0 1 0 10.4 10.4Z"></path></svg>
+      </button>
+    </div>
+
     </div>
   </div>
 </nav>
@@ -31,34 +59,34 @@
     <div class="wrap stage">
       <div class="orb"></div>
       <div class="center">
-        <span class="hero-badge">
-          <span class="dot"></span>首页 · <span data-year>2026</span> · 额度来源：李老师
+        <span class="hero-badge" data-i18n-html-key="hero.badge">
+          <span class="dot"></span>首页 · <span data-year="">2026</span> · 额度来源：李老师
         </span>
-        <h1 class="big">欧阳文钧</h1>
-        <p class="lead">
+        <h1 class="big" data-i18n-key="hero.name">欧阳文钧</h1>
+        <p class="lead" data-i18n-html-key="hero.lead">
           一个把「效率」当成信仰的人。<br>
           爱好很专一：白嫖李老师的东西（Token）。
         </p>
-        <p class="token-line">
+        <p class="token-line" data-i18n-html-key="hero.tokenLine">
           Token 就是这么简单 · <span class="thanks">感谢李老师的赞助</span>
         </p>
         <div class="btns">
-          <a class="btn btn-solid btn-lg" href="projects/index.html" data-magnetic>
+          <a class="btn btn-solid btn-lg" href="projects/index.html" data-magnetic="" data-i18n-html-key="hero.cta">
             了解更多 <span class="arr">›</span>
           </a>
-          <a class="btn btn-ghost btn-lg" href="#tokens">查看 Token 中心</a>
+          <a class="btn btn-ghost btn-lg" href="#tokens" data-i18n-key="hero.cta2">查看 Token 中心</a>
         </div>
       </div>
 
       <div style="max-width:640px;margin:52px auto 0" class="">
         <div class="card">
-          <div class="bar"><i></i><i></i><i></i><span>李老师 · Token 分发终端</span></div>
+          <div class="bar"><i></i><i></i><i></i><span data-i18n-key="hero.term">李老师 · Token 分发终端</span></div>
           <div class="body">
             <div class="chat">
-              <div class="bubble">新的一批 <code>Token</code> 已经到了，谁先来？</div>
-              <div class="bubble me">我。我一直在。</div>
-              <div class="bubble">你上周不是刚拿过吗？</div>
-              <div class="bubble me">那是上周的额度，本周是本周的额度。</div>
+              <div class="bubble" data-i18n-key="hero.b1">新的一批 <code>Token</code> 已经到了，谁先来？</div>
+              <div class="bubble me" data-i18n-key="hero.b2">我。我一直在。</div>
+              <div class="bubble" data-i18n-key="hero.b3">你上周不是刚拿过吗？</div>
+              <div class="bubble me" data-i18n-key="hero.b4">那是上周的额度，本周是本周的额度。</div>
             </div>
           </div>
         </div>
@@ -70,9 +98,9 @@
   <!-- ================= 简介 ================= -->
   <section id="intro">
     <div class="wrap center">
-      <p class="eyebrow reveal">简介</p>
-      <h2 class="big reveal d1">把有限的额度，<br>用出无限的价值。</h2>
-      <p class="lead reveal d2">
+      <p class="eyebrow reveal" data-i18n-key="intro.eyebrow">简介</p>
+      <h2 class="big reveal d1" data-i18n-html-key="intro.title">把有限的额度，<br>用出无限的价值。</h2>
+      <p class="lead reveal d2" data-i18n-key="intro.lead">
         我做的事很简单：找到被我需要的资源，然后用最优雅的方式把它变成我的。
         在这一点上，我从不偷懒 —— 顺便还做出了三个能跑的项目。
       </p>
@@ -84,23 +112,23 @@
     <div class="wrap">
       <div class="grid g4">
         <div class="stat reveal">
-          <b class="grad" data-count="3" data-suffix="年+" data-magnet>0</b>
-          <span>专注白嫖年限</span>
+          <b class="grad" data-count="3" data-suffix="年+" data-magnet="" data-i18n-key="stat.years">0</b>
+          <span data-i18n-key="stat.yearsLabel">专注白嫖年限</span>
         </div>
         <div class="stat accent reveal d1">
-          <b class="has-alt" data-count="4" data-suffix="亿+" data-alt=" (400,000,000+)">0</b>
-          <span>累计白嫖 Token</span>
+          <b class="has-alt" data-count="4" data-suffix="亿+" data-alt=" (400,000,000+)" data-i18n-key="stat.tokensAlt">0</b>
+          <span data-i18n-key="stat.tokensLabel">累计白嫖 Token</span>
         </div>
         <div class="stat reveal d2">
-          <b class="deep" data-count="0" data-suffix="元">0</b>
-          <span>累计自费支出</span>
+          <b class="deep" data-count="0" data-suffix="元" data-i18n-key="stat.spend">0</b>
+          <span data-i18n-key="stat.spendLabel">累计自费支出</span>
         </div>
         <div class="stat reveal d3">
-          <b class="grad" data-count="100" data-suffix="%">0</b>
-          <span>下次还来概率</span>
+          <b class="grad" data-count="100" data-suffix="%" data-i18n-key="stat.again">0</b>
+          <span data-i18n-key="stat.againLabel">下次还来概率</span>
         </div>
       </div>
-      <p class="stats-note center reveal d2">
+      <p class="stats-note center reveal d2" data-i18n-html-key="stats.note">
         <b id="statsNumber">400,000,000+</b> 曾白嫖 token，全程 0 元，余额仍在上涨。
         其中一部分变成了 <a href="projects/index.html" style="color:var(--accent)">三个真实项目</a>。
       </p>
@@ -111,40 +139,38 @@
   <section id="tokens" class="dark">
     <div class="wrap">
       <div class="center">
-        <p class="eyebrow reveal">Token 控制中心</p>
-        <h2 class="big reveal d1">额度，是拿来用的。</h2>
-        <p class="lead reveal d2">
+        <p class="eyebrow reveal" data-i18n-key="tok.eyebrow">Token 控制中心</p>
+        <h2 class="big reveal d1" data-i18n-key="tok.title">额度，是拿来用的。</h2>
+        <p class="lead reveal d2" data-i18n-html-key="tok.lead">
           实时监控我从李老师那里获得的 Token 余量。<br>
           按一下，看看会发生什么。
         </p>
       </div>
 
-      <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:40px;align-items:center;margin-top:44px"
-           class="token-board">
+      <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:40px;align-items:center;margin-top:44px" class="token-board">
         <div class="reveal d1" style="border-radius:24px;padding:40px 36px;
              background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));
              border:1px solid var(--line-dark);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)">
-          <div style="font-size:12.5px;color:#86868b;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px">当前 Token 余量</div>
+          <div data-tkey="tok.balance" style="font-size:12.5px;color:#86868b;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px" data-i18n-key="tok.balance">当前 Token 余量</div>
           <div id="tokenValue" style="font-size:clamp(52px,8vw,76px);font-weight:700;line-height:1;letter-spacing:-.04em;
                font-variant-numeric:tabular-nums;background:linear-gradient(135deg,#fff,#7cc4ff 60%,#0a84ff);
                -webkit-background-clip:text;background-clip:text;color:transparent;transition:transform .25s var(--ease)">0</div>
-          <div style="font-size:15px;color:#86868b;margin-top:12px">tokens · 来源：李老师</div>
+          <div data-tkey="tok.unit" style="font-size:15px;color:#86868b;margin-top:12px">tokens · 来源：李老师</div>
           <div style="margin-top:22px;height:8px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden">
             <i id="meterBar" style="display:block;height:100%;width:62%;border-radius:99px;
                background:linear-gradient(90deg,#0a84ff,#64d2ff);transition:width .6s var(--ease)"></i>
           </div>
-          <div id="tokenNote" style="font-size:12px;color:#6e6e73;margin-top:14px">状态正常 · 正在等待下一次分发</div>
+          <div id="tokenNote" data-tkey="tok.note" style="font-size:12px;color:#6e6e73;margin-top:14px" data-i18n-key="tok.note">状态正常 · 正在等待下一次分发</div>
           <div class="center" style="margin-top:26px">
-            <button class="btn btn-solid" id="getToken">获取 Token</button>
+            <button class="btn btn-solid" id="getToken" data-tkey="tok.btn" data-i18n-key="tok.btn">获取 Token</button>
           </div>
         </div>
 
         <div class="reveal d2" style="font-family:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
-             font-size:12.5px;line-height:1.7;color:#a1a1a6;border-left:2px solid rgba(255,255,255,.16);padding-left:14px"
-             id="logLines">
-          <div>[10:00:01] 监听李老师的分发频道 <b style="color:#64d2ff">✓</b></div>
-          <div>[10:00:02] 检测到可用 Token <b style="color:#64d2ff">✓</b></div>
-          <div>[10:00:03] 执行获取流程…… <b style="color:#64d2ff">✓</b></div>
+             font-size:12.5px;line-height:1.7;color:#a1a1a6;border-left:2px solid rgba(255,255,255,.16);padding-left:14px" id="logLines">
+          <div data-tkey-html="tok.log1" data-i18n-key="tok.log1">[10:00:01] 监听李老师的分发频道 <b style="color:#64d2ff">✓</b></div>
+          <div data-tkey-html="tok.log2" data-i18n-key="tok.log2">[10:00:02] 检测到可用 Token <b style="color:#64d2ff">✓</b></div>
+          <div data-tkey-html="tok.log3" data-i18n-key="tok.log3">[10:00:03] 执行获取流程…… <b style="color:#64d2ff">✓</b></div>
         </div>
       </div>
     </div>
@@ -154,45 +180,45 @@
   <section id="hobby">
     <div class="wrap">
       <div class="center">
-        <p class="eyebrow reveal">爱好</p>
-        <h2 class="big reveal d1">一件事，做到专业。</h2>
-        <p class="lead reveal d2">爱好不需要很多，够用、够深、够理直气壮就行。</p>
-        <p class="hint reveal d3">↓ 把鼠标移到标题上试试，它们会躲</p>
+        <p class="eyebrow reveal" data-i18n-key="hobby.eyebrow">爱好</p>
+        <h2 class="big reveal d1" data-i18n-key="hobby.title">一件事，做到专业。</h2>
+        <p class="lead reveal d2" data-i18n-key="hobby.lead">爱好不需要很多，够用、够深、够理直气壮就行。</p>
+        <p class="hint reveal d3" data-i18n-key="hobby.hint">↓ 把鼠标移到标题上试试，它们会躲</p>
       </div>
 
       <div class="tiles">
         <article class="tile t1 reveal">
-          <div class="k">主要爱好</div>
-          <h3 class="mid"><span class="magnet" data-magnet>白嫖李老师的 Token</span></h3>
-          <p>核心爱好，长期主义。不追热点，只追额度。李老师一上线，我就在线。</p>
+          <div class="k" data-i18n-key="hobby.k1">主要爱好</div>
+          <h3 class="mid"><span class="magnet" data-magnet="" data-i18n-key="hobby.t1">白嫖李老师的 Token</span></h3>
+          <p data-i18n-key="hobby.p1">核心爱好，长期主义。不追热点，只追额度。李老师一上线，我就在线。</p>
         </article>
         <article class="tile t2 reveal d1">
-          <div class="k">技能树</div>
-          <h3 class="mid"><span class="magnet" data-magnet>精准识别可用资源</span></h3>
-          <p>在信息里找机会，在公告里找福利。别人看到的是通知，我看到的是入口。</p>
+          <div class="k" data-i18n-key="hobby.k2">技能树</div>
+          <h3 class="mid"><span class="magnet" data-magnet="" data-i18n-key="hobby.t2">精准识别可用资源</span></h3>
+          <p data-i18n-key="hobby.p2">在信息里找机会，在公告里找福利。别人看到的是通知，我看到的是入口。</p>
         </article>
         <article class="tile t3 reveal d1">
-          <div class="k">方法论</div>
-          <h3 class="mid"><span class="magnet" data-magnet>礼貌且持续</span></h3>
-          <p>从不多拿，但从不缺席。用一句「谢谢李老师」维持长期可持续的合作关系。</p>
+          <div class="k" data-i18n-key="hobby.k3">方法论</div>
+          <h3 class="mid"><span class="magnet" data-magnet="" data-i18n-key="hobby.t3">礼貌且持续</span></h3>
+          <p data-i18n-key="hobby.p3">从不多拿，但从不缺席。用一句「谢谢李老师」维持长期可持续的合作关系。</p>
         </article>
         <article class="tile t4 reveal d2">
-          <div class="k">隐藏爱好</div>
-          <h3 class="mid"><span class="magnet" data-magnet>看余额往上走</span></h3>
-          <p>没有比数字变大更让人安心的画面了。如果有，那就是它变得更快。</p>
+          <div class="k" data-i18n-key="hobby.k4">隐藏爱好</div>
+          <h3 class="mid"><span class="magnet" data-magnet="" data-i18n-key="hobby.t4">看余额往上走</span></h3>
+          <p data-i18n-key="hobby.p4">没有比数字变大更让人安心的画面了。如果有，那就是它变得更快。</p>
         </article>
         <article class="tile t3 wide reveal d3">
           <div class="wide-top">
-            <div class="w-label">累计白嫖成果</div>
+            <div class="w-label" data-i18n-key="hobby.wLabel">累计白嫖成果</div>
             <div class="w-value" id="bigNumber">
               <span class="w-glow" id="bigGlow" aria-hidden="true"></span>
               <span class="digits" id="bigDigits">400,000,000</span><span class="w-plus" id="bigPlus">+</span>
             </div>
-            <div class="w-unit">tokens · 来自李老师 · 自费 0 元</div>
+            <div class="w-unit" data-i18n-key="hobby.wUnit">tokens · 来自李老师 · 自费 0 元</div>
           </div>
-          <div class="k">长期目标</div>
-          <h3 class="mid"><span class="magnet" data-magnet>实现 Token 自由</span></h3>
-          <p>不是拥有很多 Token，而是需要的时候，刚好有。李老师一上线，我就在线。</p>
+          <div class="k" data-i18n-key="hobby.k5">长期目标</div>
+          <h3 class="mid"><span class="magnet" data-magnet="" data-i18n-key="hobby.t5">实现 Token 自由</span></h3>
+          <p data-i18n-key="hobby.p5">不是拥有很多 Token，而是需要的时候，刚好有。李老师一上线，我就在线。</p>
         </article>
       </div>
     </div>
@@ -202,49 +228,49 @@
   <section id="models" style="background:var(--paper-alt)">
     <div class="wrap">
       <div class="center">
-        <p class="eyebrow reveal">配置</p>
-        <h2 class="big reveal d1">选一个版本认识我。</h2>
-        <p class="lead reveal d2">同一个欧阳文钧，三种相处模式。</p>
+        <p class="eyebrow reveal" data-i18n-key="models.eyebrow">配置</p>
+        <h2 class="big reveal d1" data-i18n-key="models.title">选一个版本认识我。</h2>
+        <p class="lead reveal d2" data-i18n-key="models.lead">同一个欧阳文钧，三种相处模式。</p>
       </div>
 
       <div class="model-grid">
         <div class="model reveal">
-          <div class="tagline">基础版</div>
-          <h3>点头之交</h3>
-          <div class="price">成本：一句你好</div>
+          <div class="tagline" data-i18n-key="models.tagBasic">基础版</div>
+          <h3 data-i18n-key="models.hBasic">点头之交</h3>
+          <div class="price" data-i18n-key="models.pBasic">成本：一句你好</div>
           <ul>
-            <li class="ok">见面打招呼</li>
-            <li class="ok">朋友圈点赞</li>
-            <li class="no">不共享 Token 情报</li>
-            <li class="no">不参与抢额度</li>
+            <li class="ok" data-i18n-key="models.b1">见面打招呼</li>
+            <li class="ok" data-i18n-key="models.b2">朋友圈点赞</li>
+            <li class="no" data-i18n-key="models.b3">不共享 Token 情报</li>
+            <li class="no" data-i18n-key="models.b4">不参与抢额度</li>
           </ul>
-          <a class="btn btn-quiet" href="#contact">保持距离</a>
+          <a class="btn btn-quiet" href="#contact" data-i18n-key="models.cBasic">保持距离</a>
         </div>
 
         <div class="model best reveal d1">
-          <div class="tagline">Pro 版 · 推荐</div>
-          <h3>同学</h3>
-          <div class="price">成本：互相帮忙</div>
+          <div class="tagline" data-i18n-key="models.tagPro">Pro 版 · 推荐</div>
+          <h3 data-i18n-key="models.hPro">同学</h3>
+          <div class="price" data-i18n-key="models.pPro">成本：互相帮忙</div>
           <ul>
-            <li class="ok">日常交流与组队</li>
-            <li class="ok">共享学习资源</li>
-            <li class="ok">Token 情报互通</li>
-            <li class="no">不代抢额度</li>
+            <li class="ok" data-i18n-key="models.r1">日常交流与组队</li>
+            <li class="ok" data-i18n-key="models.r2">共享学习资源</li>
+            <li class="ok" data-i18n-key="models.r3">Token 情报互通</li>
+            <li class="no" data-i18n-key="models.r4">不代抢额度</li>
           </ul>
-          <a class="btn btn-solid" href="#contact">升级到 Pro</a>
+          <a class="btn btn-solid" href="#contact" data-i18n-key="models.cPro">升级到 Pro</a>
         </div>
 
         <div class="model reveal d2">
-          <div class="tagline">Max 版</div>
-          <h3>李老师本人</h3>
-          <div class="price">成本：持续供 Token</div>
+          <div class="tagline" data-i18n-key="models.tagMax">Max 版</div>
+          <h3 data-i18n-key="models.hMax">李老师本人</h3>
+          <div class="price" data-i18n-key="models.pMax">成本：持续供 Token</div>
           <ul>
-            <li class="ok">无限次被白嫖</li>
-            <li class="ok">获得一句真诚的谢谢</li>
-            <li class="ok">成为本站的核心关键词</li>
-            <li class="ok">长期合作关系</li>
+            <li class="ok" data-i18n-key="models.m1">无限次被白嫖</li>
+            <li class="ok" data-i18n-key="models.m2">获得一句真诚的谢谢</li>
+            <li class="ok" data-i18n-key="models.m3">成为本站的核心关键词</li>
+            <li class="ok" data-i18n-key="models.m4">长期合作关系</li>
           </ul>
-          <a class="btn btn-ghost" href="#contact">联系我</a>
+          <a class="btn btn-ghost" href="#contact" data-i18n-key="models.cMax">联系我</a>
         </div>
       </div>
     </div>
@@ -253,13 +279,13 @@
   <!-- ================= 联系方式 ================= -->
   <section id="contact" class="dark">
     <div class="wrap center">
-      <p class="eyebrow reveal">联系</p>
-      <h2 class="big reveal d1">有 Token 的时候，<br>记得叫我。</h2>
-      <p class="lead reveal d2">无论白天黑夜，只要额度还在，我就在。</p>
+      <p class="eyebrow reveal" data-i18n-key="contact.eyebrow">联系</p>
+      <h2 class="big reveal d1" data-i18n-html-key="contact.title">有 Token 的时候，<br>记得叫我。</h2>
+      <p class="lead reveal d2" data-i18n-key="contact.lead">无论白天黑夜，只要额度还在，我就在。</p>
       <div class="btns reveal d3">
-        <a class="btn btn-solid" href="#hero">回到顶部</a>
-        <a class="btn btn-ghost gh-link" href="https://github.com/Wenjun6326" target="_blank" rel="noopener noreferrer">
-          <svg class="gh-ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        <a class="btn btn-solid" href="#hero" data-i18n-key="contact.top">回到顶部</a>
+        <a class="btn btn-ghost gh-link" href="https://github.com/Wenjun6326" target="_blank" rel="noopener noreferrer" data-i18n-html-key="contact.github">
+          <svg class="gh-ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path></svg>
           前往 GitHub
         </a>
       </div>
@@ -267,27 +293,27 @@
       <div class="contacts">
         <a class="c-card reveal d1" href="https://github.com/Wenjun6326" target="_blank" rel="noopener noreferrer">
           <span class="ico">
-            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path></svg>
           </span>
-          <span class="txt"><strong>GitHub</strong><small>github.com/Wenjun6326</small></span>
+          <span class="txt"><strong data-i18n-key="contact.ghCard">GitHub</strong><small>github.com/Wenjun6326</small></span>
         </a>
 
         <a class="c-card reveal d2" href="mailto:w1330253@gmail.com">
           <span class="ico">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h13A2.5 2.5 0 0 1 21 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5v-11Zm2.2-.3 6.8 5.1 6.8-5.1H5.2Zm13.8 1.9-6.2 4.65a1.5 1.5 0 0 1-1.8 0L4.8 8.1v9.4c0 .4.3.7.7.7h13c.4 0 .7-.3.7-.7V8.1Z"/></svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h13A2.5 2.5 0 0 1 21 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5v-11Zm2.2-.3 6.8 5.1 6.8-5.1H5.2Zm13.8 1.9-6.2 4.65a1.5 1.5 0 0 1-1.8 0L4.8 8.1v9.4c0 .4.3.7.7.7h13c.4 0 .7-.3.7-.7V8.1Z"></path></svg>
           </span>
-          <span class="txt"><strong>我的邮箱</strong><small>w1330253@gmail.com</small></span>
+          <span class="txt"><strong data-i18n-key="contact.mailLabel">我的邮箱</strong><small>w1330253@gmail.com</small></span>
         </a>
 
         <a class="c-card reveal d3" href="mailto:lwl5633@gmail.com">
           <span class="ico">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6c-3.4 0-6.2 2.8-6.2 6.2v3.4c0 .6-.2 1.1-.6 1.5l-1 1.1c-.6.6-.1 1.6.7 1.6h14.2c.8 0 1.3-1 .7-1.6l-1-1.1c-.4-.4-.6-.9-.6-1.5V8.8c0-3.4-2.8-6.2-6.2-6.2Zm0 18.8a2.9 2.9 0 0 0 2.8-2.2H9.2A2.9 2.9 0 0 0 12 21.4Z"/></svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6c-3.4 0-6.2 2.8-6.2 6.2v3.4c0 .6-.2 1.1-.6 1.5l-1 1.1c-.6.6-.1 1.6.7 1.6h14.2c.8 0 1.3-1 .7-1.6l-1-1.1c-.4-.4-.6-.9-.6-1.5V8.8c0-3.4-2.8-6.2-6.2-6.2Zm0 18.8a2.9 2.9 0 0 0 2.8-2.2H9.2A2.9 2.9 0 0 0 12 21.4Z"></path></svg>
           </span>
-          <span class="txt"><strong>李老师（Token 供应方）</strong><small>lwl5633@gmail.com</small></span>
+          <span class="txt"><strong data-i18n-key="contact.mrLiLabel">李老师（Token 供应方）</strong><small>lwl5633@gmail.com</small></span>
         </a>
       </div>
 
-      <p class="small reveal d3" style="margin-top:34px">
+      <p class="small reveal d3" style="margin-top:34px" data-i18n-key="contact.disclaimer">
         本站为个人趣味自我介绍演示，灵感来自 Apple 官网的排版与视觉语言。
       </p>
     </div>
@@ -299,51 +325,51 @@
   <div class="wrap">
     <div class="foot-links">
       <div>
-        <h4>关于我</h4>
+        <h4 data-i18n-key="foot.about">关于我</h4>
         <ul>
-          <li><a href="#intro">简介</a></li>
-          <li><a href="#stats">数据</a></li>
-          <li><a href="#hobby">爱好</a></li>
+          <li><a href="#intro" data-i18n-key="foot.about1">简介</a></li>
+          <li><a href="#stats" data-i18n-key="foot.about2">数据</a></li>
+          <li><a href="#hobby" data-i18n-key="foot.about3">爱好</a></li>
         </ul>
       </div>
       <div>
-        <h4>Token</h4>
+        <h4 data-i18n-key="foot.token">Token</h4>
         <ul>
-          <li><a href="#tokens">控制中心</a></li>
-          <li><a href="#stats">获取记录</a></li>
-          <li><a href="#models">配置说明</a></li>
+          <li><a href="#tokens" data-i18n-key="foot.token1">控制中心</a></li>
+          <li><a href="#stats" data-i18n-key="foot.token2">获取记录</a></li>
+          <li><a href="#models" data-i18n-key="foot.token3">配置说明</a></li>
         </ul>
       </div>
       <div>
-        <h4>项目</h4>
+        <h4 data-i18n-key="foot.proj">项目</h4>
         <ul>
-          <li><a href="projects/index.html#esp32">ESP32 测试平台</a></li>
-          <li><a href="projects/index.html#bbq">Barbeque's Delight</a></li>
-          <li><a href="projects/index.html#cultural">Cultural Delights</a></li>
+          <li><a href="projects/index.html#esp32" data-i18n-key="foot.proj1">ESP32 测试平台</a></li>
+          <li><a href="projects/index.html#bbq" data-i18n-key="foot.proj2">Barbeque's Delight</a></li>
+          <li><a href="projects/index.html#cultural" data-i18n-key="foot.proj3">Cultural Delights</a></li>
         </ul>
       </div>
       <div>
-        <h4>致谢</h4>
+        <h4 data-i18n-key="foot.thanks">致谢</h4>
         <ul>
-          <li><a href="#contact">李老师</a></li>
-          <li><a href="#stats">400,000,000+ Token</a></li>
-          <li><a href="#contact">谢谢李老师</a></li>
+          <li><a href="#contact" data-i18n-key="foot.thanks1">李老师</a></li>
+          <li><a href="#stats" data-i18n-key="foot.thanks2">400,000,000+ Token</a></li>
+          <li><a href="#contact" data-i18n-key="foot.thanks3">谢谢李老师</a></li>
         </ul>
       </div>
       <div>
-        <h4>联系我</h4>
+        <h4 data-i18n-key="foot.contact">联系我</h4>
         <ul>
           <li><a href="https://github.com/Wenjun6326" target="_blank" rel="noopener noreferrer">GitHub · Wenjun6326</a></li>
           <li><a class="mail-inline" href="mailto:w1330253@gmail.com">
-            <svg class="mi" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h13A2.5 2.5 0 0 1 21 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5v-11Zm2.2-.3 6.8 5.1 6.8-5.1H5.2Zm13.8 1.9-6.2 4.65a1.5 1.5 0 0 1-1.8 0L4.8 8.1v9.4c0 .4.3.7.7.7h13c.4 0 .7-.3.7-.7V8.1Z"/></svg>
+            <svg class="mi" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h13A2.5 2.5 0 0 1 21 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5v-11Zm2.2-.3 6.8 5.1 6.8-5.1H5.2Zm13.8 1.9-6.2 4.65a1.5 1.5 0 0 1-1.8 0L4.8 8.1v9.4c0 .4.3.7.7.7h13c.4 0 .7-.3.7-.7V8.1Z"></path></svg>
             w1330253@gmail.com</a></li>
-          <li><a href="https://github.com/Wenjun6326/wenjun6326.github.io" target="_blank" rel="noopener noreferrer">本页源码</a></li>
+          <li><a href="https://github.com/Wenjun6326/wenjun6326.github.io" target="_blank" rel="noopener noreferrer" data-i18n-key="foot.source">本页源码</a></li>
         </ul>
       </div>
     </div>
     <div class="foot-note">
-      <span>Copyright © <span data-year>2026</span> 欧阳文钧. 保留所有 Token 的获取权。</span>
-      <span>累计白嫖 400,000,000+ token · 单次成本 0 元</span>
+      <span data-i18n-key="foot.copyright">Copyright © <span data-year="">2026</span> 欧阳文钧. 保留所有 Token 的获取权。</span>
+      <span data-i18n-key="foot.claim">累计白嫖 400,000,000+ token · 单次成本 0 元</span>
     </div>
   </div>
 </footer>
@@ -356,6 +382,9 @@
 #tokenValue.pop{transform:scale(1.06);}
 </style>
 
-<script src="app.js?v=20261007b"></script>
-</body>
-</html>
+<script src="app.js?v=20261007c"></script>
+
+
+
+
+</body></html>

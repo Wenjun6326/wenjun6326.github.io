@@ -499,6 +499,7 @@ footer{background:var(--paper-alt);padding:60px 0 44px;border-top:1px solid var(
 @view-transition{navigation:auto;}
 /* 背景色跟随页面，避免过渡期间露出白底造成“闪一下” */
 ::view-transition{background-color:#fbfbfd;}
+html[data-theme="dark"]::view-transition{background-color:#0a0a0a;}
 ::view-transition-old(root),::view-transition-new(root){mix-blend-mode:normal;}
 ::view-transition-old(root){animation:vtOut .24s var(--ease) both;}
 ::view-transition-new(root){animation:vtIn .34s var(--ease) both;}
@@ -509,3 +510,137 @@ footer{background:var(--paper-alt);padding:60px 0 44px;border-top:1px solid var(
 @media (prefers-reduced-motion:reduce){
   ::view-transition-old(root),::view-transition-new(root){animation:none !important;}
 }
+
+/* =========================================================
+   导航右侧工具区：语言切换 + 主题切换
+   ========================================================= */
+.nav-tools{display:flex;align-items:center;gap:9px;margin-left:auto;padding-left:14px;flex:none;}
+#nav .links{margin-left:auto;min-width:0;}
+
+.tool-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  height:30px;min-width:30px;padding:0 9px;border-radius:980px;
+  background:rgba(0,0,0,.055);border:1px solid transparent;
+  color:var(--ink-soft);cursor:pointer;
+  transition:background .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease),transform .18s var(--spring);
+}
+.tool-btn:hover{background:rgba(0,0,0,.1);color:var(--accent);}
+.tool-btn:active{transform:scale(.94);}
+.tool-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+/* 语言切换：中文 / EN 双标签，高亮当前语言 */
+.lang-toggle{position:relative;padding:0 8px;font-size:11.5px;letter-spacing:.01em;}
+.lang-toggle .lg{position:relative;z-index:1;padding:0 5px;line-height:30px;transition:color .3s var(--ease);}
+.lang-toggle .lg-en{opacity:.5;}
+.lang-toggle::before{
+  content:"";position:absolute;top:3px;left:4px;width:calc(50% - 4px);height:calc(100% - 6px);
+  border-radius:980px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.18);
+  transition:transform .34s var(--spring);
+}
+.lang-toggle.is-en::before{transform:translateX(calc(100% + 0px));}
+.lang-toggle .lg-zh{color:var(--ink);font-weight:600;}
+.lang-toggle .lg-en{color:var(--ink-soft);}
+.lang-toggle.is-en .lg-zh{color:var(--ink-soft);font-weight:400;}
+.lang-toggle.is-en .lg-en{color:var(--ink);font-weight:600;opacity:1;}
+
+/* 主题切换：图标随模式切换 */
+.theme-toggle svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+.theme-toggle .ic-moon{display:none;}
+.theme-toggle.is-dark .ic-sun{display:none;}
+.theme-toggle.is-dark .ic-moon{display:block;}
+
+@media (max-width:734px){
+  .nav-tools{gap:7px;}
+  .tool-btn{padding:0 7px;}
+  .lang-toggle .lg{padding:0 4px;font-size:11px;}
+}
+
+/* =========================================================
+   暗色模式
+   ========================================================= */
+html[data-theme="dark"]{
+  --ink:#f5f5f7;
+  --ink-soft:#a1a1a6;
+  --paper:#000;
+  --paper-alt:#0a0a0a;
+  --line:rgba(255,255,255,.14);
+  --line-dark:rgba(255,255,255,.18);
+  --surface:#141416;
+  --accent:#0a84ff;
+  --accent-hover:#3d9bff;
+  color-scheme:dark;
+  background:var(--paper);
+}
+html[data-theme="dark"] .dark,
+html[data-theme="dark"] #tokens,
+html[data-theme="dark"] #contact{background:#000;}
+
+/* 导航与磨砂层 */
+html[data-theme="dark"] #nav{background:rgba(22,22,24,.74);}
+html[data-theme="dark"] .p-nav{background:rgba(22,22,24,.82);}
+html[data-theme="dark"] .p-nav a{background:rgba(255,255,255,.09);color:#d2d2d7;}
+html[data-theme="dark"] .tool-btn{background:rgba(255,255,255,.11);color:#d2d2d7;}
+html[data-theme="dark"] .tool-btn:hover{background:rgba(255,255,255,.18);color:#fff;}
+html[data-theme="dark"] .lang-toggle::before{background:#48484a;box-shadow:0 1px 4px rgba(0,0,0,.5);}
+html[data-theme="dark"] .lang-toggle .lg-zh,html[data-theme="dark"] .lang-toggle .lg-en{color:#f5f5f7;}
+html[data-theme="dark"] .lang-toggle .lg-zh,html[data-theme="dark"] .lang-toggle.is-en .lg-en{font-weight:600;}
+html[data-theme="dark"] .lang-toggle .lg-en,html[data-theme="dark"] .lang-toggle.is-en .lg-zh{color:#a1a1a6;font-weight:400;}
+
+/* 浅色首屏与各类白卡 */
+html[data-theme="dark"] #hero{background:#0a0a0a;}
+html[data-theme="dark"] .hero-badge{
+  background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12);
+  box-shadow:none;color:#a1a1a6;
+}
+html[data-theme="dark"] .card{background:var(--surface);border-color:rgba(255,255,255,.09);box-shadow:0 30px 70px -34px rgba(0,0,0,.9);}
+html[data-theme="dark"] .card .bar{background:#101012;border-bottom-color:rgba(255,255,255,.09);}
+html[data-theme="dark"] .card .bar span{color:#86868b;}
+html[data-theme="dark"] .bubble{background:rgba(255,255,255,.1);color:#f5f5f7;}
+html[data-theme="dark"] .bubble.me{background:var(--accent);color:#fff;}
+html[data-theme="dark"] .bubble code{background:rgba(255,255,255,.13);color:#7cc4ff;}
+html[data-theme="dark"] .name-tag,html[data-theme="dark"] .token-pill{background:rgba(255,255,255,.09);color:#a1a1a6;}
+
+html[data-theme="dark"] .stat{background:var(--surface);border-color:rgba(255,255,255,.07);}
+html[data-theme="dark"] .stat b.has-alt,
+html[data-theme="dark"] .stat b.deep,
+html[data-theme="dark"] .stat b em{color:#7cc4ff;}
+html[data-theme="dark"] .stat b.grad{
+  background:linear-gradient(160deg,#ffffff 15%,#7cc4ff 85%);
+  -webkit-background-clip:text;background-clip:text;
+}
+html[data-theme="dark"] .stat.accent{
+  background:linear-gradient(168deg,rgba(10,132,255,.16),rgba(255,255,255,.02) 62%);
+  border-color:rgba(10,132,255,.3);
+}
+html[data-theme="dark"] .stats-note b{color:#f5f5f7;}
+
+html[data-theme="dark"] .model{background:var(--surface);border-color:rgba(255,255,255,.08);}
+html[data-theme="dark"] .model.best{border-color:rgba(10,132,255,.5);box-shadow:0 0 0 3px rgba(10,132,255,.16);}
+html[data-theme="dark"] .model li{border-top-color:rgba(255,255,255,.09);border-bottom-color:rgba(255,255,255,.09);}
+html[data-theme="dark"] .btn-quiet{background:rgba(255,255,255,.12);color:#f5f5f7;}
+html[data-theme="dark"] .btn-quiet:hover{background:rgba(255,255,255,.2);}
+
+html[data-theme="dark"] .summary-band{background:var(--paper-alt);}
+html[data-theme="dark"] .summary-band .s-card{background:var(--surface);border-color:rgba(255,255,255,.07);}
+
+/* 页脚 */
+html[data-theme="dark"] footer{background:var(--paper-alt);}
+
+/* Token 账单区的数字与卡片在暗色下已是深色体系，仅微调 */
+html[data-theme="dark"] .w-value{color:#7cc4ff;}
+html[data-theme="dark"] .w-plus{color:#7cc4ff;}
+
+/* 暗色下 t3 类磁贴（原本是浅色）改为深色玻璃 */
+html[data-theme="dark"] .t3{
+  background:linear-gradient(148deg,#1c1c1f 0%,#232327 55%,#2a2f38 100%);
+  color:#f5f5f7;
+}
+html[data-theme="dark"] .t3 .k,html[data-theme="dark"] .t3 p{opacity:.66;}
+html[data-theme="dark"] .wide-top{border-bottom-color:rgba(255,255,255,.14);}
+html[data-theme="dark"] #projects-hero{background:var(--paper-alt);}
+html[data-theme="dark"] .art{border-color:rgba(255,255,255,.08);}
+html[data-theme="dark"] .art.art-food{background:linear-gradient(150deg,#2a1f14,#241a12);}
+html[data-theme="dark"] .art.art-green{background:linear-gradient(150deg,#14231a,#101c16);}
+
+/* 滚动条 */
+html[data-theme="dark"]{scrollbar-color:#3a3a3c #0a0a0a;}

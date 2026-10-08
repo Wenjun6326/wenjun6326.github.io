@@ -14,6 +14,8 @@ projects/index.html     二级页面 —— 三个项目详情（含插画与下
 profile/index.html      旧路径，自动重定向到首页（避免已分享的链接失效）
 styles.css              共享样式
 app.js                  共享脚本（交互、动效、下载、页面过渡）
+assets/i18n-dict.js     中英文案字典
+assets/i18n-theme.js    语言与主题模块
 ```
 
 页面层级只有两层：
@@ -21,6 +23,26 @@ app.js                  共享脚本（交互、动效、下载、页面过渡�
 1. **首页 = 个人主页**（`/`）：姓名、Token 主题句「Token 就是这么简单 · 感谢李老师的赞助」、
    「了解更多 ›」按钮 → 进入项目页；往下还有简介、数据、Token 控制中心、爱好、配置、联系方式。
 2. **项目页**（`/projects/`）：三个项目的完整介绍与下载。
+
+## 中英双语
+
+- 导航栏右侧的 **中文 / EN** 开关一键切换，选择记在 `localStorage`
+- 首次访问按浏览器语言自动判断（`navigator.language` 以 `zh` 开头则中文）
+- 机制是 **标记 + 字典**，不是复制两份 HTML：
+  - `data-i18n-key` → 纯文本替换
+  - `data-i18n-html-key` → 含内联标签（`<br>`、`<code>`、`<b>`）的段落
+  - `data-i18n-attr` → 属性（如下载文件名）
+  - `data-tkey` / `data-tkey-html` → 运行时由 JS 改写的文案（余额、日志、状态、按钮）
+- 共 216 条文案，页面标题与 `meta description` 也随语言切换
+- 切换语言时**文字磁吸会按新文本重新拆分**（中英字符数不同）
+
+## 暗色模式
+
+- 跟随系统（`prefers-color-scheme`）+ 手动切换（导航栏太阳/月亮按钮），选择记在 `localStorage`
+- 用 CSS 变量 + `[data-theme="dark"]` 覆盖，包含导航磨砂层、白卡、数据卡、
+  磁贴、页脚、插画底板与滚动条
+- `<head>` 里有内联脚本在 CSS 之前定主题，**避免首屏闪白**
+- `prefers-reduced-motion`、`color-scheme: dark` 均已处理
 
 ## 三个项目
 
@@ -35,14 +57,14 @@ app.js                  共享脚本（交互、动效、下载、页面过渡�
 ## 技术特点
 
 - **零依赖**：纯 HTML / CSS / 原生 JS，无需构建，可离线打开
-- **丝滑跳转**：跨文档 View Transitions API（`@view-transition`），导航栏与主标题做形变过渡；不支持时降级为淡出遮罩
+- **中英双语 + 暗色模式**：见上文，均为标记驱动，无重复 HTML
+- **丝滑跳转**：跨文档 View Transitions API（`@view-transition`），导航栏保持不动；不支持时降级为淡出遮罩
 - **文字磁吸**：鼠标靠近标题时每个字被推开，阻尼弹簧回弹；静止时严格对齐（无初始偏移）
 - **累计数字动效**：从 380,000,000 滚到 400,000,000，随后 `+` 放大到 1.78 倍并浮现蓝色渐变光晕
 - **手绘 SVG 插画**：三幅原创插画，带 WiFi 波纹、炉火跳动、蒸汽上升等循环动画
 - **按下即下载**：`Content-Disposition: attachment` 直链 + 真实 `<a download>` 点击，并有导航兜底，页面不跳转
-- **几何图案**：漂移的网格渐变、浮动几何体视差、无缝跑马灯
-- **响应式**：360px ~ 1440px 全区间无横向溢出
-- **无障碍**：`prefers-reduced-motion` 全面降级，插画带 `aria-label`，拆分字符保留 `aria-label`
+- **响应式**：360px ~ 1440px 全区间无横向溢出；导航在 734px 以下自动收起链接
+- **无障碍**：`prefers-reduced-motion` 全面降级，插画带 `aria-label`，切换按钮带 `aria-label`，拆分字符保留 `aria-label`
 
 ## 本地运行
 
