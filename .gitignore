@@ -2,3 +2,5 @@ _*.mjs
 _*.png
 _*.json
 
+*.bak
+
