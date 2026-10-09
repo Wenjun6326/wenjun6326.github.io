@@ -665,59 +665,16 @@ html[data-theme="dark"] .art.art-green{background:linear-gradient(150deg,#14231a
 html[data-theme="dark"]{scrollbar-color:#3a3a3c #0a0a0a;}
 
 /* =========================================================
-   主题切换的丝滑过渡
-   .theme-anim 在首帧之后才由脚本加上，避免首屏加载时也做过渡
+   主题切换
+   注意：这里【不能】写 transition 简写或 transition-duration。
+   那会覆盖元素原有的过渡（.reveal 的 0.9s 入场、.tile/.stat/.model
+   的 transform + box-shadow 悬停上浮），导致整站动效被削弱。
+   颜色过渡改由 assets/i18n-theme.js 在切换瞬间用 Web Animations API 补，
+   View Transitions 可用时则走「从按钮扩散」的圆形揭示。
    ========================================================= */
-html.theme-anim,
-html.theme-anim body,
-html.theme-anim #nav,
-html.theme-anim #nav .brand,
-html.theme-anim #nav .links a,
-html.theme-anim .tool-btn,
-html.theme-anim .p-nav,
-html.theme-anim .p-nav a,
-html.theme-anim .card,
-html.theme-anim .card .bar,
-html.theme-anim .card .bar span,
-html.theme-anim .bubble,
-html.theme-anim .stat,
-html.theme-anim .model,
-html.theme-anim .model li,
-html.theme-anim .summary-band,
-html.theme-anim .summary-band .s-card,
-html.theme-anim .tile,
-html.theme-anim .art,
-html.theme-anim .hero-badge,
-html.theme-anim .c-card,
-html.theme-anim .lang-toggle .lg,
-html.theme-anim .foot-links a,
-html.theme-anim footer,
-html.theme-anim section,
-html.theme-anim h1,
-html.theme-anim h2,
-html.theme-anim h3,
-html.theme-anim p,
-html.theme-anim a,
-html.theme-anim span,
-html.theme-anim li,
-html.theme-anim .facts .fk,
-html.theme-anim .facts .fv{
-  transition:
-    background-color .42s var(--ease),
-    border-color .42s var(--ease),
-    color .42s var(--ease),
-    fill .42s var(--ease),
-    box-shadow .42s var(--ease);
-}
-/* View Transitions 的圆形揭示：从切换按钮扩散 */
 ::view-transition-old(theme-reveal),
 ::view-transition-new(theme-reveal){animation:none;mix-blend-mode:normal;}
 html.theme-vt::view-transition-old(root),
 html.theme-vt::view-transition-new(root){animation:none;}
 html.theme-vt::view-transition-old(root){z-index:1;}
 html.theme-vt::view-transition-new(root){z-index:2;}
-@media (prefers-reduced-motion:reduce){
-  html.theme-anim,
-  html.theme-anim body,
-  html.theme-anim *{transition:none !important;}
-}

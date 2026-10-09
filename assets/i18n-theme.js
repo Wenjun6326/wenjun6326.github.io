@@ -50,12 +50,59 @@
     syncThemeChrome(t);
   }
 
-  /* 手动切换：有 View Transitions 就用「从按钮扩散」的圆形揭示 */
+  /* ---------------------------------------------------------
+     无 View Transitions 时的降级：用 Web Animations API 只补一层
+     颜色过渡。绝不动 CSS 的 transition（否则会覆盖元素原有的
+     入场/悬停过渡，这是之前踩过的坑）。
+     --------------------------------------------------------- */
+  var COLOR_PROPS = ["background-color", "border-color", "color", "fill"];
+  var COLOR_SEL = "#nav, #nav .brand, #nav .links a, .tool-btn, .p-nav, .p-nav a, body, " +
+    ".card, .card .bar, .card .bar span, .bubble, .stat, .model, .model li, " +
+    ".summary-band, .s-card, .tile, .art, .hero-badge, .c-card, .lang-toggle .lg, " +
+    ".foot-links a, footer, section, h1, h2, h3, p, a, span, li, .facts .fk, .facts .fv";
+
+  function fallbackThemeAnim(next) {
+    var els;
+    try { els = document.querySelectorAll(COLOR_SEL); } catch (e) { els = []; }
+    var list = Array.prototype.slice.call(els);
+
+    /* 1. 记录切换前的颜色 */
+    list.forEach(function (el) {
+      var cs = getComputedStyle(el);
+      var from = {};
+      COLOR_PROPS.forEach(function (p) {
+        var v = cs.getPropertyValue(p);
+        if (v && v !== "rgba(0, 0, 0, 0)") from[p] = v;
+      });
+      el.__wjFrom = Object.keys(from).length ? from : null;
+    });
+
+    /* 2. 真正切换主题 */
+    applyTheme(next);
+
+    /* 3. 从旧色过渡到新色（只动颜色，不碰 transform/opacity） */
+    list.forEach(function (el) {
+      var from = el.__wjFrom;
+      delete el.__wjFrom;
+      if (!from || !el.animate) return;
+      var cs = getComputedStyle(el);
+      var to = {};
+      Object.keys(from).forEach(function (p) {
+        var v = cs.getPropertyValue(p);
+        if (v) to[p] = v;
+      });
+      try { el.animate([from, to], { duration: 420, easing: "cubic-bezier(.22,.61,.36,1)" }); } catch (e) {}
+    });
+  }
+
+  /* 手动切换：优先「从按钮扩散」的圆形揭示，其次颜色过渡，最后直接切换 */
   function switchTheme(next) {
     try { localStorage.setItem(LS_THEME, next); } catch (e) {}
     var btn = document.getElementById("themeToggle");
+    if (reducedMotion()) { applyTheme(next); return; }
+
     var supportsVT = typeof document.startViewTransition === "function";
-    if (!btn || !supportsVT || reducedMotion()) { applyTheme(next); return; }
+    if (!btn || !supportsVT) { fallbackThemeAnim(next); return; }
 
     var r = btn.getBoundingClientRect();
     var cx = r.left + r.width / 2, cy = r.top + r.height / 2;

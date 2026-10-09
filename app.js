@@ -22,10 +22,41 @@
      1. 滚动进场
      --------------------------------------------------------- */
   var reveals = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
+
+  /* 入场结束后撤掉 .reveal / .in，把过渡权交还给元素自身的样式。
+     否则 .reveal.in 的 `opacity,transform .9s` 会一直盖住
+     .tile / .stat / .model 等卡片自己的 hover 过渡（弹性上浮会变成 0.9s 缓动）。 */
+  function handOff(el) {
+    if (!el.classList.contains("in")) return;
+    el.classList.remove("reveal", "in", "d1", "d2", "d3");
+    el.style.transitionDelay = "";
+  }
+  function handOffLater(el, delay) {
+    var done = false;
+    function once() {
+      if (done) return;
+      done = true;
+      el.removeEventListener("transitionend", onEnd);
+      handOff(el);
+    }
+    function onEnd(e) {
+      if (e.target !== el) return;
+      if (e.propertyName !== "opacity" && e.propertyName !== "transform") return;
+      once();
+    }
+    el.addEventListener("transitionend", onEnd);
+    /* 兜底：transitionend 偶尔不触发（标签页隐藏等） */
+    setTimeout(once, delay + 400);
+  }
+
   if ("IntersectionObserver" in window && !reduceMotion) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+        if (e.isIntersecting) {
+          e.target.classList.add("in");
+          io.unobserve(e.target);
+          handOffLater(e.target, 900 + 260);
+        }
       });
     }, { threshold: 0.14, rootMargin: "0px 0px -8% 0px" });
     reveals.forEach(function (el) { io.observe(el); });
