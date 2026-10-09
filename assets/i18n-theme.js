@@ -1,6 +1,6 @@
 /* =========================================================
    语言与主题模块
-   - 暗色模式：跟随系统 + 手动切换（localStorage 记忆）
+   - 暗色模式：跟随系统 + 手动切换（localStorage 记忆），带丝滑过渡
    - 中英双语：data-i18n-key / data-i18n-html-key / data-i18n-attr 标记 + 字典替换
    暴露 window.DSH_I18N.t() 供 app.js 拼接动态文案
    ========================================================= */
@@ -21,9 +21,18 @@
   function readThemePref() {
     try { return localStorage.getItem(LS_THEME) || "auto"; } catch (e) { return "auto"; }
   }
-  function applyTheme(pref) {
-    var t = resolveTheme(pref);
-    root.setAttribute("data-theme", t);
+  function reducedMotion() {
+    return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  /* 首帧之后再开启过渡，避免页面加载时也做动画 */
+  function enableAnim() {
+    if (!reducedMotion()) root.classList.add("theme-anim");
+  }
+  if (document.readyState === "complete") requestAnimationFrame(enableAnim);
+  else window.addEventListener("load", function () { requestAnimationFrame(enableAnim); });
+
+  function syncThemeChrome(t) {
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute("content", t === "dark" ? "#000000" : "#f5f5f7");
     var btn = document.getElementById("themeToggle");
@@ -34,12 +43,47 @@
       btn.setAttribute("title", label);
     }
   }
-  function setThemePref(pref) {
-    try { localStorage.setItem(LS_THEME, pref); } catch (e) {}
-    applyTheme(pref);
+
+  function applyTheme(pref) {
+    var t = resolveTheme(pref);
+    root.setAttribute("data-theme", t);
+    syncThemeChrome(t);
+  }
+
+  /* 手动切换：有 View Transitions 就用「从按钮扩散」的圆形揭示 */
+  function switchTheme(next) {
+    try { localStorage.setItem(LS_THEME, next); } catch (e) {}
+    var btn = document.getElementById("themeToggle");
+    var supportsVT = typeof document.startViewTransition === "function";
+    if (!btn || !supportsVT || reducedMotion()) { applyTheme(next); return; }
+
+    var r = btn.getBoundingClientRect();
+    var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    var far = Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy));
+    var anim = null;
+
+    document.documentElement.classList.add("theme-vt");
+    var vt = document.startViewTransition(function () { applyTheme(next); });
+    if (vt && vt.ready && vt.ready.then) {
+      vt.ready.then(function () {
+        anim = root.animate(
+          { clipPath: ["circle(0px at " + cx + "px " + cy + "px)", "circle(" + far + "px at " + cx + "px " + cy + "px)"] },
+          { duration: 520, easing: "cubic-bezier(.22,.61,.36,1)", pseudoTree: "::view-transition-new(root)" }
+        );
+      }).catch(function () {});
+    }
+    if (vt && vt.finished && vt.finished.finally) {
+      vt.finished.finally(function () {
+        if (anim) anim.cancel();
+        document.documentElement.classList.remove("theme-vt");
+      });
+    } else {
+      document.documentElement.classList.remove("theme-vt");
+    }
   }
 
   window.__WJ_APPLY_THEME__ = applyTheme;
+  window.__WJ_SWITCH_THEME__ = switchTheme;
   applyTheme(readThemePref());
 
   if (window.matchMedia) {
@@ -188,7 +232,7 @@
       snapshot();
       var tb = document.getElementById("themeToggle");
       if (tb) tb.addEventListener("click", function () {
-        setThemePref(resolveTheme(readThemePref()) === "dark" ? "light" : "dark");
+        switchTheme(resolveTheme(readThemePref()) === "dark" ? "light" : "dark");
       });
       var lb = document.getElementById("langToggle");
       if (lb) lb.addEventListener("click", function () {
